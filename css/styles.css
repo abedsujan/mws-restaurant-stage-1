@@ -388,6 +388,6 @@ nav h1 a {
     font-size: 1em;
     height: 1.8em;
     margin: 5px 10px;
-    width: 60vmax;
+    width: 60vmin;
   }
 }
