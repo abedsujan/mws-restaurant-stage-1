@@ -1,14 +1,25 @@
 @charset "utf-8";
 /* CSS Document */
 
+/* Normalize Stylesheet */
+
+html,
+body,
+main,
+section,
+header,
+footer {
+  width: 100%;
+}
+
 body,
 td,
 th,
 p {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 10pt;
+  font-size: 1rem;
   color: #333;
-  line-height: 1.5;
+  line-height: 1.2em;
 }
 
 body {
@@ -20,7 +31,7 @@ body {
 ul,
 li {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 10pt;
+  font-size: 1rem;
   color: #333;
 }
 
@@ -72,11 +83,12 @@ section {
 #footer {
   background-color: #444;
   color: #aaa;
-  font-size: 8pt;
+  font-size: 0.8rem;
   letter-spacing: 1px;
   padding: 25px;
   text-align: center;
   text-transform: uppercase;
+  width: 100%;
 }
 
 /* ====================== Navigation ====================== */
@@ -94,7 +106,7 @@ nav h1 {
 
 nav h1 a {
   color: #fff;
-  font-size: 14pt;
+  font-size: 1rem;
   font-weight: 200;
   letter-spacing: 10px;
   text-transform: uppercase;
