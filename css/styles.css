@@ -13,11 +13,10 @@ footer {
 }
 
 html,
-body{
+body {
   -webkit-font-smoothing: antialiased;
-  font-family: Roboto,sans-serif;
+  font-family: Roboto, sans-serif;
 }
-
 
 body,
 td,
@@ -170,6 +169,7 @@ nav h1 a {
   width: 100%;
   background-color: #3397DB;
   align-items: center;
+  padding: 0.5em 0;
 }
 
 .filter-options h2 {
@@ -177,20 +177,17 @@ nav h1 a {
   font-size: 1em;
   font-weight: normal;
   line-height: 1;
-  margin: 0 1.25em;
-  padding-top: 0.80em;
+  margin: 0 0.5em;
 }
 
 .filter-options select {
   background-color: white;
   border: 1px solid #fff;
-  font-family: Arial, sans-serif;
-  font-size: 11pt;
-  height: 35px;
+  font-size: 1em;
+  height: 1.8em;
   letter-spacing: 0;
-  margin: 10px;
-  padding: 0 10px;
-  width: 200px;
+  margin: 5px 10px;
+  width: calc(100% - 20px);
 }
 
 /* ====================== Restaurant Listing ====================== */
@@ -361,19 +358,36 @@ nav h1 a {
 }
 
 /* ====================== Responsiveness ====================== */
+
 @media screen and (min-width: 560px) {
   nav h1 a {
     font-size: 1em;
     letter-spacing: 0.4em;
   }
-
   #map {
     height: 80vh;
     width: 100%;
     background-color: #ccc;
   }
+  
+  
 }
 
-@media screen and (min-width: 600px) {
 
+@media screen and (min-width: 560px) and (max-width: 650px) {
+  .filter-options select {
+    font-size: 1em;
+    height: 1.8em;
+    margin: 5px 10px;
+    width: calc(50% - 24px);
+  }
+}
+
+@media screen and (min-width: 651px) {
+  .filter-options select {
+    font-size: 1em;
+    height: 1.8em;
+    margin: 5px 10px;
+    width: 60vmax;
+  }
 }
