@@ -193,10 +193,12 @@ nav h1 a {
 /* ====================== Restaurant Listing ====================== */
 
 #restaurants-list {
+  display: flex;
+  flex-wrap: wrap;
   background-color: #f3f3f3;
   list-style: outside none none;
   margin: 0;
-  padding: 30px 15px 60px;
+  padding: 0;
   text-align: center;
 }
 
@@ -204,11 +206,11 @@ nav h1 a {
   background-color: #fff;
   border: 2px solid #ccc;
   font-family: Arial, sans-serif;
-  margin: 15px;
+  margin: 10px;
   min-height: 380px;
-  padding: 0 30px 25px;
+  padding: 5px 10px 15px;
   text-align: left;
-  width: 270px;
+  width: 100%;
 }
 
 #restaurants-list .restaurant-img {
@@ -241,12 +243,13 @@ nav h1 a {
   border-bottom: 3px solid #eee;
   color: #fff;
   display: inline-block;
-  font-size: 10pt;
+  font-size: 1em;
   margin: 15px 0 0;
-  padding: 8px 30px 10px;
+  padding: 10px 0;
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
+  width: 100%;
 }
 
 /* ====================== Restaurant Details ====================== */
@@ -359,6 +362,12 @@ nav h1 a {
 
 /* ====================== Responsiveness ====================== */
 
+@media screen and (max-width: 560px) {
+  #restaurants-list li a {
+    padding: 24px 0;
+  }
+}
+
 @media screen and (min-width: 560px) {
   nav h1 a {
     font-size: 1em;
@@ -369,10 +378,7 @@ nav h1 a {
     width: 100%;
     background-color: #ccc;
   }
-  
-  
 }
-
 
 @media screen and (min-width: 560px) and (max-width: 650px) {
   .filter-options select {
@@ -380,6 +386,10 @@ nav h1 a {
     height: 1.8em;
     margin: 5px 10px;
     width: calc(50% - 24px);
+  }
+  #restaurants-list li a {
+    padding: 15px 0;
+    width: 50%
   }
 }
 
@@ -389,5 +399,20 @@ nav h1 a {
     height: 1.8em;
     margin: 5px 10px;
     width: 60vmin;
+  }
+  #restaurants-list li {
+    width: calc(50% - 44px);
+  }
+}
+
+@media screen and (min-width: 780px) {
+  #restaurants-list li {
+    width: calc(33% - 44px);
+  }
+}
+
+@media screen and (min-width: 960px) {
+  #restaurants-list li {
+    width: 270px;
   }
 }
