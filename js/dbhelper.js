@@ -146,12 +146,26 @@ class DBHelper {
     return (`./restaurant.html?id=${restaurant.id}`);
   }
 
-  /**
+    /**
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
-    return (`/img/${restaurant.photograph}`);
+    let src = restaurant.responsive;
+    src = src[src.length - 1].split(' ')[0];
+    return (`img/${src}`);
   }
+
+  /**
+   * Return set of responsive restaurant JPG images
+   */
+  static imageSourceForRestaurant(restaurant) {
+    let srcset = '';
+    restaurant.responsive.forEach(element => {
+      srcset += `img/${element},`;
+    });
+    return srcset;
+  }
+
 
   /**
    * Map marker for a restaurant.
