@@ -60,11 +60,12 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
 
-
-  const image = document.getElementById('restaurant-img');
-  const sizes = '(min-width: 1200px) 700px, (min-width: 770px) 450px, (min-width: 46em) 350px';
-  image.insertAdjacentHTML('beforeend', `
-    <source sizes="${sizes}" srcset="${DBHelper.imageSourceForRestaurant(restaurant)}">
+  const picture = document.getElementById('restaurant-img');
+  picture.insertAdjacentHTML('beforeend', `
+    <source media="(max-width: 500px)" srcset="img/${restaurant.responsive_photo[0]}">
+    <source media="(max-width: 640px)" srcset="img/${restaurant.responsive_photo[1]}">
+    <source media="(min-width: 641px)" srcset="img/${restaurant.responsive_photo[0]}">
+    <source media="(min-width: 800px)" srcset="${DBHelper.imageUrlForRestaurant(restaurant)}">
     <img class="restaurant-img" src="${DBHelper.imageUrlForRestaurant(restaurant)}" alt="${restaurant.photograph_alt}">
   `);
 

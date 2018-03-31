@@ -142,11 +142,11 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  */
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
-  
+
   const picture = document.createElement('picture');
   picture.insertAdjacentHTML('beforeend', `
   
-  <source media="(max-width: 500px)" srcset="img/${restaurant.responsive_photo[0]}">
+    <source media="(max-width: 500px)" srcset="img/${restaurant.responsive_photo[0]}">
     <source media="(max-width: 640px)" srcset="img/${restaurant.responsive_photo[1]}">
     
     <source media="(min-width: 641px)" srcset="img/${restaurant.responsive_photo[0]}">
