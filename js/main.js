@@ -12,6 +12,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
   fetchCuisines();
 });
 
+// Register service worker
+window.onload = () => {
+  DBHelper.registerSW();
+};
+
 /**
  * Fetch all neighborhoods and set their HTML.
  */

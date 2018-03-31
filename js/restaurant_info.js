@@ -1,6 +1,11 @@
 let restaurant;
 var map;
 
+
+// Register service worker
+window.onload = () => {
+  DBHelper.registerSW();
+};
 /**
  * Initialize Google map, called from HTML.
  */

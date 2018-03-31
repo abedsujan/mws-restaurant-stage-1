@@ -3,6 +3,15 @@
  */
 class DBHelper {
 
+
+  // Register service worker
+  static registerSW() {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('service worker registered!'));
+    }
+  }
+
   /**
    * Database URL.
    * Change this to restaurants.json file location on your server.
@@ -146,7 +155,7 @@ class DBHelper {
     return (`./restaurant.html?id=${restaurant.id}`);
   }
 
-    /**
+  /**
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
@@ -174,8 +183,8 @@ class DBHelper {
       title: restaurant.name,
       url: DBHelper.urlForRestaurant(restaurant),
       map: map,
-      animation: google.maps.Animation.DROP}
-    );
+      animation: google.maps.Animation.DROP
+    });
     return marker;
   }
 
