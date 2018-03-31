@@ -62,7 +62,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
     <source sizes="${sizes}" srcset="${DBHelper.imageSourceForRestaurant(restaurant)}">
     <img class="restaurant-img" src="${DBHelper.imageUrlForRestaurant(restaurant)}" alt="${restaurant.photograph_alt}">
   `);
-  
+
   // const image = document.getElementById('restaurant-img');
   // image.className = 'restaurant-img'
   // image.alt = `Picture of ${restaurant.name} restaurant`;
@@ -126,26 +126,18 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
  */
 createReviewHTML = (review) => {
   const li = document.createElement('li');
-  li.setAttribute("class", "review");
-  const name = document.createElement('p');
-  name.innerHTML = review.name;
-  name.setAttribute("class", "review-name");
-  li.appendChild(name);
-
-  const date = document.createElement('p');
-  date.setAttribute("class", "review-date");
-  date.innerHTML = review.date;
-  li.appendChild(date);
-
-  const rating = document.createElement('p');
-  rating.setAttribute("class", "review-rating");
-  rating.innerHTML = `Rating: ${review.rating}`;
-  li.appendChild(rating);
-
-  const comments = document.createElement('p');
-  comments.setAttribute("class", "review-comments");
-  comments.innerHTML = review.comments;
-  li.appendChild(comments);
+  li.insertAdjacentHTML('beforeend', `
+    <div class="review-header">
+      <div class="reviewer">
+        <h3>${review.name}</h3>
+        <span class="review-date">${review.date}</span>
+      </div>
+      <div class="review-rating">Rating: ${review.rating}</div>
+    </div>
+    <div class="review-comment">
+      ${review.comments}
+    </div>
+  `);
 
   return li;
 }
@@ -153,7 +145,7 @@ createReviewHTML = (review) => {
 /**
  * Add restaurant name to the breadcrumb navigation menu
  */
-fillBreadcrumb = (restaurant=self.restaurant) => {
+fillBreadcrumb = (restaurant = self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   const li = document.createElement('li');
   li.innerHTML = restaurant.name;
