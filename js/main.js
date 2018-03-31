@@ -137,11 +137,18 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  */
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
+  
+  const picture = document.createElement('picture');
+  picture.insertAdjacentHTML('beforeend', `
+  
+  <source media="(max-width: 500px)" srcset="img/${restaurant.responsive_photo[0]}">
+    <source media="(max-width: 640px)" srcset="img/${restaurant.responsive_photo[1]}">
+    
+    <source media="(min-width: 641px)" srcset="img/${restaurant.responsive_photo[0]}">
+    <img class="restaurant-img" src="${DBHelper.imageUrlForRestaurant(restaurant)}" alt="${restaurant.photograph_alt}">
+  `);
+  li.insertAdjacentElement('beforeend', picture);
 
-  const image = document.createElement('img');
-  image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  li.append(image);
 
   const name = document.createElement('h1');
   name.innerHTML = restaurant.name;

@@ -150,9 +150,7 @@ class DBHelper {
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
-    let src = restaurant.responsive;
-    src = src[src.length - 1].split(' ')[0];
-    return (`img/${src}`);
+    return (`/img/${restaurant.id}.jpg`);
   }
 
   /**
@@ -160,7 +158,7 @@ class DBHelper {
    */
   static imageSourceForRestaurant(restaurant) {
     let srcset = '';
-    restaurant.responsive.forEach(element => {
+    restaurant.responsive_photo.forEach(element => {
       srcset += `img/${element},`;
     });
     return srcset;
