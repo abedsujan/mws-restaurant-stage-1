@@ -150,7 +150,7 @@ createRestaurantHTML = (restaurant) => {
     <source media="(max-width: 640px)" srcset="img/${restaurant.responsive_photo[1]}">
     
     <source media="(min-width: 641px)" srcset="img/${restaurant.responsive_photo[0]}">
-    <img class="restaurant-img" src="${DBHelper.imageUrlForRestaurant(restaurant)}" alt="${restaurant.photograph_alt}">
+    <img class="restaurant-img" src="${DBHelper.imageUrlForRestaurant(restaurant)}" alt="Image of ${restaurant.photograph_alt} Restaurant">
   `);
   li.insertAdjacentElement('beforeend', picture);
 
