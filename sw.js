@@ -9,6 +9,7 @@ const filesToCache = [
     'js/dbhelper.js',
     'js/restaurant_info.js',
     'manifest.json',
+    '/img/',
     'http://fonts.googleapis.com/css?family=Google+Sans:400|Roboto:400,400italic,500,500italic,700,700italic|Roboto+Mono:400,500,700|Material+Icons',
     'https://maps.googleapis.com/maps-api-v3/api/js/32/6/intl/en_gb/map.js'
 ];
