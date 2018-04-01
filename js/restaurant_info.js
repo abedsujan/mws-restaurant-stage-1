@@ -65,7 +65,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
     <source media="(max-width: 500px)" srcset="img/${restaurant.responsive_photo[0]}">
     <source media="(max-width: 640px)" srcset="img/${restaurant.responsive_photo[1]}">
     <source media="(min-width: 641px)" srcset="img/${restaurant.responsive_photo[0]}">
-    <source media="(min-width: 800px)" srcset="${DBHelper.imageUrlForRestaurant(restaurant)}">
+    <source media="(min-width: 800px)" srcset="img/${restaurant.photograph}">
     <img class="restaurant-img" src="${DBHelper.imageUrlForRestaurant(restaurant)}" alt="${restaurant.photograph_alt}">
   `);
 
