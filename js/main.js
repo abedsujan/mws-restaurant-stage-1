@@ -38,10 +38,8 @@ fetchNeighborhoods = () => {
 fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
   const select = document.getElementById('neighborhoods-select');
   neighborhoods.forEach(neighborhood => {
-    const option = document.createElement('option');
-    option.innerHTML = neighborhood;
-    option.value = neighborhood;
-    select.append(option);
+    const option = `<option value="${neighborhood}">${neighborhood}</option>`;
+    select.insertAdjacentHTML('beforeend', option);
   });
 }
 
@@ -66,10 +64,11 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
   const select = document.getElementById('cuisines-select');
 
   cuisines.forEach(cuisine => {
-    const option = document.createElement('option');
-    option.innerHTML = cuisine;
-    option.value = cuisine;
-    select.append(option);
+    // const option = document.createElement('option');
+    // option.innerHTML = cuisine;
+    // option.value = cuisine;
+    const option = `<option value="${cuisine}">${cuisine}</option>`;
+    select.insertAdjacentHTML('beforeend', option);
   });
 }
 
@@ -143,32 +142,17 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  */
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
-
-  const picture = document.createElement('picture');
-  picture.insertAdjacentHTML('beforeend', `
-    <img class="restaurant-img" src="${DBHelper.imageUrlForRestaurant(restaurant)}" alt="Image of ${restaurant.photograph_alt} Restaurant">
+  li.insertAdjacentHTML('beforeend', `
+    <picture>
+      <img class="restaurant-img" src="${DBHelper.imageUrlForRestaurant(restaurant)}" alt="Image of ${restaurant.photograph_alt} Restaurant">
+    </picture>
+    <h3>${restaurant.name}</h3>
+    <p>${restaurant.neighborhood}</p>
+    <p>${restaurant.address}</p>
+    <a href="${DBHelper.urlForRestaurant(restaurant)}">View Details</a>
   `);
-  li.insertAdjacentElement('beforeend', picture);
 
-
-  const name = document.createElement('h3');
-  name.innerHTML = restaurant.name;
-  li.append(name);
-
-  const neighborhood = document.createElement('p');
-  neighborhood.innerHTML = restaurant.neighborhood;
-  li.append(neighborhood);
-
-  const address = document.createElement('p');
-  address.innerHTML = restaurant.address;
-  li.append(address);
-
-  const more = document.createElement('a');
-  more.innerHTML = 'View Details';
-  more.href = DBHelper.urlForRestaurant(restaurant);
-  li.append(more)
-
-  return li
+  return li;
 }
 
 /**
