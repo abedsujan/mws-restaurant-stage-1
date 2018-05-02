@@ -54,24 +54,18 @@ fetchRestaurantFromURL = (callback) => {
  * Create restaurant HTML and add it to the webpage
  */
 fillRestaurantHTML = (restaurant = self.restaurant) => {
-  const name = document.getElementById('restaurant-name');
-  name.innerHTML = restaurant.name;
+
+  const restaurantContainer = document.getElementById('restaurant-container');
+  restaurantContainer.innerHTML = `
+    <h2 id="restaurant-name">${restaurant.name}</h2>
+    <picture id="restaurant-img">
+      <img class="restaurant-img" src="${DBHelper.imageUrlForRestaurant(restaurant)}" alt="Image of ${restaurant.photograph_alt} Restaurant">
+    </picture>
+    <p id="restaurant-cuisine">${restaurant.cuisine_type}</p>
+  `;
 
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
-
-  const picture = document.getElementById('restaurant-img');
-  picture.insertAdjacentHTML('beforeend', `
-    <img class="restaurant-img" src="${DBHelper.imageUrlForRestaurant(restaurant)}" alt="Image of ${restaurant.photograph_alt} Restaurant">
-  `);
-
-  // const image = document.getElementById('restaurant-img');
-  // image.className = 'restaurant-img'
-  // image.alt = `Picture of ${restaurant.name} restaurant`;
-  // image.src = DBHelper.imageUrlForRestaurant(restaurant);
-
-  const cuisine = document.getElementById('restaurant-cuisine');
-  cuisine.innerHTML = restaurant.cuisine_type;
 
   // fill operating hours
   if (restaurant.operating_hours) {
@@ -86,19 +80,16 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
  */
 fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
   const hours = document.getElementById('restaurant-hours');
+  let tableRows = '';
+
   for (let key in operatingHours) {
-    const row = document.createElement('tr');
-
-    const day = document.createElement('td');
-    day.innerHTML = key;
-    row.appendChild(day);
-
-    const time = document.createElement('td');
-    time.innerHTML = operatingHours[key];
-    row.appendChild(time);
-
-    hours.appendChild(row);
+    tableRows += `<tr>
+                    <td>${key}</td>
+                    <td>${operatingHours[key]}</td>
+                  </tr>
+                 `;
   }
+  hours.insertAdjacentHTML('beforeend', tableRows);
 }
 
 /**
@@ -106,42 +97,45 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  */
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
-  const title = document.createElement('h3');
-  title.innerHTML = 'Reviews';
-  container.appendChild(title);
+  const containerInnerHtml = `
+    <h3>Reviews</h3>
+    ${ (!reviews) ? '<p>No reviews yet!</p>': createReviewListHTML(reviews) }
+  `;
 
-  if (!reviews) {
-    const noReviews = document.createElement('p');
-    noReviews.innerHTML = 'No reviews yet!';
-    container.appendChild(noReviews);
-    return;
-  }
+  container.insertAdjacentHTML('beforeend', containerInnerHtml);
+}
+
+
+/**
+ * Create review list HTML and add it to the container.
+ */
+createReviewListHTML = (reviews) => {
   const ul = document.getElementById('reviews-list');
   reviews.forEach(review => {
-    ul.appendChild(createReviewHTML(review));
+    ul.insertAdjacentHTML('beforeend', createReviewHTML(review));
   });
-  container.appendChild(ul);
+
+  return ul;
 }
 
 /**
- * Create review HTML and add it to the webpage.
+ * Create review HTML and add it to the list ul.
  */
 createReviewHTML = (review) => {
-  const li = document.createElement('li');
-  li.insertAdjacentHTML('beforeend', `
-    <div class="review-header">
-      <div class="reviewer">
-        <h3>${review.name}</h3>
-        <span class="review-date">${review.date}</span>
+  return `
+    <li>
+      <div class="review-header">
+        <div class="reviewer">
+          <h3>${review.name}</h3>
+          <span class="review-date">${review.date}</span>
+        </div>
+        <div class="review-rating">Rating: ${review.rating}</div>
       </div>
-      <div class="review-rating">Rating: ${review.rating}</div>
-    </div>
-    <div class="review-comment">
-      ${review.comments}
-    </div>
-  `);
-
-  return li;
+      <div class="review-comment">
+        ${review.comments}
+      </div>
+    </li>
+  `;
 }
 
 /**
