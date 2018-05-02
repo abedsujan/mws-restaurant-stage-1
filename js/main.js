@@ -1,8 +1,9 @@
-let restaurants,
-  neighborhoods,
-  cuisines
-var map
+let restaurants;
+let neighborhoods;
+let cuisines;
+let map;
 var markers = []
+
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
@@ -145,11 +146,6 @@ createRestaurantHTML = (restaurant) => {
 
   const picture = document.createElement('picture');
   picture.insertAdjacentHTML('beforeend', `
-  
-    <source media="(max-width: 500px)" srcset="img/${restaurant.responsive_photo[0]}">
-    <source media="(max-width: 640px)" srcset="img/${restaurant.responsive_photo[1]}">
-    
-    <source media="(min-width: 641px)" srcset="img/${restaurant.responsive_photo[0]}">
     <img class="restaurant-img" src="${DBHelper.imageUrlForRestaurant(restaurant)}" alt="Image of ${restaurant.photograph_alt} Restaurant">
   `);
   li.insertAdjacentElement('beforeend', picture);

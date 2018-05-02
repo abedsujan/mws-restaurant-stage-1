@@ -62,10 +62,6 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   const picture = document.getElementById('restaurant-img');
   picture.insertAdjacentHTML('beforeend', `
-    <source media="(max-width: 500px)" srcset="img/${restaurant.responsive_photo[0]}">
-    <source media="(max-width: 640px)" srcset="img/${restaurant.responsive_photo[1]}">
-    <source media="(min-width: 641px)" srcset="img/${restaurant.responsive_photo[0]}">
-    <source media="(min-width: 800px)" srcset="img/${restaurant.photograph}">
     <img class="restaurant-img" src="${DBHelper.imageUrlForRestaurant(restaurant)}" alt="Image of ${restaurant.photograph_alt} Restaurant">
   `);
 
