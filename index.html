@@ -16,16 +16,23 @@
 
   <link rel="icon" type="image/png" sizes="200x200" href="/img/icon/logo_200.png">
   <link rel="icon" type="image/png" sizes="512x512" href="/img/icon/logo_512.png">
+  <script type="text/javascript" src="js/header.js"></script>
+
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+
+  <script>
+    $(function () {
+      $("#header").load("html/header.html");
+      $("#footer").load("html/footer.html");
+    });
+  </script>
+
 </head>
 
 <body>
-  <header>
-    <nav>
-      <h1>
-        <a href="/">Restaurant Reviews</a>
-      </h1>
-    </nav>
-  </header>
+  <header id ="header"></header>
 
   <main id="maincontent">
     <section id="map-container">
@@ -46,17 +53,11 @@
   </main>
 
   <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
+  
   <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqvXFr0WfZbi36vObjuf6suQ7t4a54mn4&libraries=places&callback=initMap"></script>
 
 
-  <footer id="footer">
-    Copyright (c) 2017
-    <a href="/" aria-labelledby="footer">
-      <strong>Restaurant Reviews</strong>
-    </a> All Rights Reserved.
-  </footer>
-
+  <footer id="footer"></footer>
 </body>
-
 </html>
