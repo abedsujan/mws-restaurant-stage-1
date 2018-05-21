@@ -16,31 +16,21 @@
 
   <link rel="icon" type="image/png" sizes="200x200" href="/img/icon/logo_200.png">
   <link rel="icon" type="image/png" sizes="512x512" href="/img/icon/logo_512.png">
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+
+  <script>
+    $(function () {
+      $("#header").load("html/header.html");
+      $("#footer").load("html/footer.html");
+    });
+  </script>
 </head>
 
 <body class="inside">
-  <!-- Beginning header -->
-  <header>
-    <!-- Beginning nav -->
-    <nav>
-      <h1>
-        <a href="/">Restaurant Reviews</a>
-      </h1>
-    </nav>
-    <!-- Beginning breadcrumb -->
-    <nav id="breadcrumb-nav" aria-label="Breadcrumb">
-      <ul id="breadcrumb">
-        <li>
-          <a href="/">Home</a>
-        </li>
-      </ul>
-    </nav>
-    <!-- End breadcrumb -->
-    <!-- End nav -->
-  </header>
-  <!-- End header -->
+  <header id="header"></header>
 
-  <!-- Beginning main -->
   <main id="maincontent">
     <!-- Beginning map -->
     <section id="map-container">
@@ -67,26 +57,15 @@
     </section>
     <!-- End reviews -->
   </main>
-  <!-- End main -->
 
-  <!-- Beginning footer -->
-  <footer id="footer">
-    Copyright (c) 2017
-    <a href="/">
-      <strong>Restaurant Reviews</strong>
-    </a> All Rights Reserved.
-  </footer>
-  <!-- End footer -->
+  <footer id="footer"></footer>
 
-  <!-- Beginning scripts -->
-  <!-- Database helpers -->
-  <script type="text/javascript" src="js/dbhelper.js"></script>
-  <!-- Main javascript file -->
-  <script type="text/javascript" src="js/restaurant_info.js"></script>
+  <script type="text/javascript" src="/js/header.js"></script>
+  <script type="text/javascript" src="/js/dbhelper.js"></script>
+  <script type="text/javascript" src="/js/restaurant_info.js"></script>
   <!-- Google Maps -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqvXFr0WfZbi36vObjuf6suQ7t4a54mn4&libraries=places&callback=initMap"></script>
   <!-- End scripts -->
-
 </body>
 
 </html>

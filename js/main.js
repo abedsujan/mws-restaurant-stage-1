@@ -4,7 +4,6 @@ let cuisines;
 let map;
 var markers = []
 
-
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
@@ -64,9 +63,6 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
   const select = document.getElementById('cuisines-select');
 
   cuisines.forEach(cuisine => {
-    // const option = document.createElement('option');
-    // option.innerHTML = cuisine;
-    // option.value = cuisine;
     const option = `<option value="${cuisine}">${cuisine}</option>`;
     select.insertAdjacentHTML('beforeend', option);
   });
@@ -86,6 +82,7 @@ window.initMap = () => {
     scrollwheel: false
   });
   updateRestaurants();
+  fillBreadcrumb();
 }
 
 /**
