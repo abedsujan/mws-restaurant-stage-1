@@ -43,100 +43,11 @@ fetchRestaurantFromURL = (callback) => {
         console.error(error);
         return;
       }
-      fillRestaurantHTML();
+      fillRestaurantHTML(restaurant);
       callback(null, restaurant)
     });
   }
 }
-
-/**
- * Create restaurant HTML and add it to the webpage
- */
-fillRestaurantHTML = (restaurant = self.restaurant) => {
-
-  const restaurantContainer = document.getElementById('restaurant-container');
-  restaurantContainer.innerHTML = `
-    <h2 id="restaurant-name">${restaurant.name}</h2>
-    <picture id="restaurant-img">
-      <img class="restaurant-img" src="${DBHelper.imageUrlForRestaurant(restaurant)}" alt="Image of ${restaurant.photograph_alt} Restaurant">
-    </picture>
-    <p id="restaurant-cuisine">${restaurant.cuisine_type}</p>
-  `;
-
-  const address = document.getElementById('restaurant-address');
-  address.innerHTML = restaurant.address;
-
-  // fill operating hours
-  if (restaurant.operating_hours) {
-    fillRestaurantHoursHTML();
-  }
-  // fill reviews
-  fillReviewsHTML();
-}
-
-/**
- * Create restaurant operating hours HTML table and add it to the webpage.
- */
-fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
-  const hours = document.getElementById('restaurant-hours');
-  let tableRows = '';
-
-  for (let key in operatingHours) {
-    tableRows += `<tr>
-                    <td>${key}</td>
-                    <td>${operatingHours[key]}</td>
-                  </tr>
-                 `;
-  }
-  hours.insertAdjacentHTML('beforeend', tableRows);
-}
-
-/**
- * Create all reviews HTML and add them to the webpage.
- */
-fillReviewsHTML = (reviews = self.restaurant.reviews) => {
-  const container = document.getElementById('reviews-container');
-  const containerInnerHtml = `
-    <h3>Reviews</h3>
-    ${ (!reviews) ? '<p>No reviews yet!</p>': createReviewListHTML(reviews) }
-  `;
-
-  container.insertAdjacentHTML('beforeend', containerInnerHtml);
-}
-
-
-/**
- * Create review list HTML and add it to the container.
- */
-createReviewListHTML = (reviews) => {
-  const ul = document.getElementById('reviews-list');
-  reviews.forEach(review => {
-    ul.insertAdjacentHTML('beforeend', createReviewHTML(review));
-  });
-
-  return ul;
-}
-
-/**
- * Create review HTML and add it to the list ul.
- */
-createReviewHTML = (review) => {
-  return `
-    <li>
-      <div class="review-header">
-        <div class="reviewer">
-          <h3>${review.name}</h3>
-          <span class="review-date">${review.date}</span>
-        </div>
-        <div class="review-rating">Rating: ${review.rating}</div>
-      </div>
-      <div class="review-comment">
-        ${review.comments}
-      </div>
-    </li>
-  `;
-}
-
 
 /**
  * Get a parameter by name from page URL.
