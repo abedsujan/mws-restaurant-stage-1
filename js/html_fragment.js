@@ -7,7 +7,7 @@ fillRestaurantHTML = (restaurant) => {
     restaurantContainer.innerHTML = createRestaurantViewHTML(restaurant);
 
     const address = document.getElementById('restaurant-address');
-    address.innerHTML = restaurant.address;
+    address.innerHTML = createRestaurantAddressHTML(restaurant.address);
 
     // fill operating hours
     if (restaurant.operating_hours) {
@@ -29,6 +29,13 @@ createRestaurantViewHTML = (restaurant) => {
     return restaurantHTML;
 }
 
+createRestaurantAddressHTML = (address) => {
+    const addressHTML = `
+        <h3>Address</h3>
+        <p>${address}</p>
+    `;
+    return addressHTML;
+}
 
 /**
  * Create all reviews HTML and add them to the webpage.
@@ -76,21 +83,22 @@ createReviewHTML = (review) => {
     return reviewHTML;
 }
 
-
 /**
  * Create restaurant operating hours HTML table and add it to the webpage.
  */
 fillRestaurantHoursHTML = (operatingHours) => {
-    const hoursElement = document.getElementById('restaurant-hours');
+    const openingHourDiv = document.getElementById('opening-hours');
 
-    const tableRows = createOpeningHourHTML(operatingHours);
-
-    hoursElement.insertAdjacentHTML('beforeend', tableRows);
+    const openingHourDivInnerHTML = `
+        <h3>Open Hours</h3>
+        ${createOpeningHourHTML(operatingHours)}
+    `;
+    openingHourDiv.insertAdjacentHTML('beforeend', openingHourDivInnerHTML);
 }
 
 // Create restaurant days opening hours 
 createOpeningHourHTML = (operatingHours) => {
-    let tableRowsHTML = '';
+    let tableRowsHTML = '<table>';
     for (const key in operatingHours) {
         tableRowsHTML += `<tr>
                             <td>${key}</td>
@@ -99,5 +107,6 @@ createOpeningHourHTML = (operatingHours) => {
                         `;
     }
 
+    tableRowsHTML += `</table>`;
     return tableRowsHTML;
 }

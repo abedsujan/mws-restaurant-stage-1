@@ -32,24 +32,21 @@
   <header id="header"></header>
 
   <main id="maincontent">
-    <!-- Beginning map -->
-    <section id="map-container">
-      <div>
-        <h3>Open Hours</h3>
-        <table id="restaurant-hours"></table>
-        <br>
-        <br>
-        <h3>Address</h3>
-        <p id="restaurant-address"></p>
-      </div>
-      <div id="map" role="application" aria-label="Google Maps showing filtered restaurant near to you."></div>
-    </section>
-    <!-- End map -->
-
     <!-- Beginning restaurant -->
     <section id="restaurant-container">
     </section>
     <!-- end restaurant -->
+
+    <!-- Beginning map -->
+    <section id="map-container">
+      <div id="opening-hours"></div>
+      <br>
+      <br>
+      <div id="restaurant-address"></div>
+
+      <div id="map" role="application" aria-label="Google Maps showing filtered restaurant near to you."></div>
+    </section>
+    <!-- End map -->
 
     <!-- Beginning reviews -->
     <section id="reviews-container">
@@ -61,7 +58,7 @@
   <footer id="footer"></footer>
 
   <script type="text/javascript" src="/js/header.js"></script>
-  
+
   <script type="text/javascript" src="/js/html_fragment.js"></script>
   <script type="text/javascript" src="/js/dbhelper.js"></script>
   <script type="text/javascript" src="/js/restaurant_info.js"></script>
