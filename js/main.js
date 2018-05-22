@@ -9,6 +9,12 @@ window.onload = () => {
  * Initialize Google map, called from HTML.
  */
 window.initMap = () => {
+  fillMap();
+  updateRestaurants();
+  fillBreadcrumb();
+}
+
+fillMap = () => {
   let loc = {
     lat: 40.722216,
     lng: -73.987501
@@ -18,22 +24,14 @@ window.initMap = () => {
     center: loc,
     scrollwheel: false
   });
-  updateRestaurants();
-  fillBreadcrumb();
 }
 
 /**
  * Update page and map for current restaurants.
  */
 updateRestaurants = () => {
-  const cSelect = document.getElementById('cuisines-select');
-  const nSelect = document.getElementById('neighborhoods-select');
-
-  const cIndex = cSelect.selectedIndex;
-  const nIndex = nSelect.selectedIndex;
-
-  const cuisine = cSelect[cIndex].value;
-  const neighborhood = nSelect[nIndex].value;
+  const cuisine = $("#cuisines-select option:selected").val();
+  const neighborhood = $("#neighborhoods-select option:selected").val();
 
   DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
     if (error) { // Got an error!
@@ -44,7 +42,6 @@ updateRestaurants = () => {
     }
   })
 }
-
 
 /**
  * Clear current restaurants, their HTML and remove their map markers.
