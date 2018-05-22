@@ -1,72 +1,9 @@
-let restaurants;
-let neighborhoods;
-let cuisines;
-let map;
 var markers = []
-
-/**
- * Fetch neighborhoods and cuisines as soon as the page is loaded.
- */
-document.addEventListener('DOMContentLoaded', (event) => {
-  fetchNeighborhoods();
-  fetchCuisines();
-});
 
 // Register service worker
 window.onload = () => {
   DBHelper.registerSW();
 };
-
-/**
- * Fetch all neighborhoods and set their HTML.
- */
-fetchNeighborhoods = () => {
-  DBHelper.fetchNeighborhoods((error, neighborhoods) => {
-    if (error) { // Got an error
-      console.error(error);
-    } else {
-      self.neighborhoods = neighborhoods;
-      fillNeighborhoodsHTML();
-    }
-  });
-}
-
-/**
- * Set neighborhoods HTML.
- */
-fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
-  const select = document.getElementById('neighborhoods-select');
-  neighborhoods.forEach(neighborhood => {
-    const option = `<option value="${neighborhood}">${neighborhood}</option>`;
-    select.insertAdjacentHTML('beforeend', option);
-  });
-}
-
-/**
- * Fetch all cuisines and set their HTML.
- */
-fetchCuisines = () => {
-  DBHelper.fetchCuisines((error, cuisines) => {
-    if (error) { // Got an error!
-      console.error(error);
-    } else {
-      self.cuisines = cuisines;
-      fillCuisinesHTML();
-    }
-  });
-}
-
-/**
- * Set cuisines HTML.
- */
-fillCuisinesHTML = (cuisines = self.cuisines) => {
-  const select = document.getElementById('cuisines-select');
-
-  cuisines.forEach(cuisine => {
-    const option = `<option value="${cuisine}">${cuisine}</option>`;
-    select.insertAdjacentHTML('beforeend', option);
-  });
-}
 
 /**
  * Initialize Google map, called from HTML.
@@ -108,6 +45,7 @@ updateRestaurants = () => {
   })
 }
 
+
 /**
  * Clear current restaurants, their HTML and remove their map markers.
  */
@@ -135,24 +73,6 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 }
 
 /**
- * Create restaurant HTML.
- */
-createRestaurantHTML = (restaurant) => {
-  const li = document.createElement('li');
-  li.insertAdjacentHTML('beforeend', `
-    <picture>
-      <img class="restaurant-img" src="${DBHelper.imageUrlForRestaurant(restaurant)}" alt="Image of ${restaurant.photograph_alt} Restaurant">
-    </picture>
-    <h3>${restaurant.name}</h3>
-    <p>${restaurant.neighborhood}</p>
-    <p>${restaurant.address}</p>
-    <a href="${DBHelper.urlForRestaurant(restaurant)}">View Details</a>
-  `);
-
-  return li;
-}
-
-/**
  * Add markers for current restaurants to the map.
  */
 addMarkersToMap = (restaurants = self.restaurants) => {
@@ -163,5 +83,39 @@ addMarkersToMap = (restaurants = self.restaurants) => {
       window.location.href = marker.url
     });
     self.markers.push(marker);
+  });
+}
+
+/**
+ * Fetch neighborhoods and cuisines as soon as the page is loaded.
+ */
+document.addEventListener('DOMContentLoaded', (event) => {
+  fetchNeighborhoods();
+  fetchCuisines();
+});
+
+/**
+ * Fetch all neighborhoods and set their HTML.
+ */
+fetchNeighborhoods = () => {
+  DBHelper.fetchNeighborhoods((error, neighborhoods) => {
+    if (error) { // Got an error
+      console.error(error);
+    } else {
+      fillNeighborhoodsHTML(neighborhoods);
+    }
+  });
+}
+
+/**
+ * Fetch all cuisines and set their HTML.
+ */
+fetchCuisines = () => {
+  DBHelper.fetchCuisines((error, cuisines) => {
+    if (error) { // Got an error!
+      console.error(error);
+    } else {
+      fillCuisinesHTML(cuisines);
+    }
   });
 }
