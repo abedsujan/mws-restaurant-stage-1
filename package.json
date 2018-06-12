@@ -1,0 +1,24 @@
+{
+  "name": "mws-restaurant-stage-1",
+  "version": "1.0.0",
+  "description": "--- #### _Restaurant Reviews_",
+  "main": "app.js",
+  "scripts": {
+    "build": "babel js -d js5",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abedsujan/mws-restaurant-stage-1.git"
+  },
+  "author": "Abed Sujan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abedsujan/mws-restaurant-stage-1/issues"
+  },
+  "homepage": "https://github.com/abedsujan/mws-restaurant-stage-1#readme",
+  "devDependencies": {
+    "bable-cli": "^6.16.0",
+    "bable-preset-es2015": "^6.16.0"
+  }
+}
