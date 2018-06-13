@@ -8,24 +8,23 @@ gulp.task('default', defaultTask);
 gulp.task('styles', stylesTask);
 
 function defaultTask(done) {
-    // place code for your default task here
+	// place code for your default task here
+	gulp.watch('sass/**/*.scss', gulp.series('styles'));
 
-    console.log('AAAAAAAA');
+	
+	// browserSync.init({
+	// 	server: "./"
+	// });
 
-
- browserSync.init({
-    server: "./"
-});
-
-    done();
+	done();
 }
 
 
 function stylesTask() {
-    return gulp.src('sass/**/*.scss')
-        .pipe(sass().on('error', sass.logError))
-        .pipe(autoprefixer({
-            browsers: ['last 2 versions']
-        }))
-        .pipe(gulp.dest('./css'));
+	return gulp.src('sass/**/*.scss')
+		.pipe(sass().on('error', sass.logError))
+		.pipe(autoprefixer({
+			browsers: ['last 2 versions']
+		}))
+		.pipe(gulp.dest('./css'));
 }
