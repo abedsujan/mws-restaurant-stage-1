@@ -3,6 +3,8 @@ var sass = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync').create();
 var eslint = require('gulp-eslint');
+var jasmine = require('gulp-jasmine-phantom');
+
 
 gulp.task('styles', () => {
 	return gulp.src('sass/**/*.scss')
@@ -10,20 +12,26 @@ gulp.task('styles', () => {
 		.pipe(autoprefixer({
 			browsers: ['last 2 versions']
 		}))
-		.pipe(gulp.dest('./css'))
+		.pipe(gulp.dest('dist/css'))
 		.pipe(browserSync.stream());;
 });
 
-gulp.task('serve', gulp.series('styles', function () {
-	browserSync.init({
-		server: "./"
-	});
-	browserSync.stream();
+gulp.task('copy-js', function () {
+	gulp.src('js/**/*.js')
+		.pipe(gulp.dest('dist/js'));
+});
 
-	gulp.watch('sass/**/*.scss', gulp.series('styles'));
-	gulp.watch('js/**/*.js', gulp.series('lint'));
-	gulp.watch("html/*.html").on('change', browserSync.reload);
-}));
+gulp.task('copy-html', function () {
+	gulp.src('./index.html')
+		.pipe(gulp.dest('./dist'));
+});
+
+gulp.task('copy-image', function () {
+	gulp.src('img/*')
+		.pipe(gulp.dest('dist/img'));
+});
+
+
 
 gulp.task('lint', () => {
 	// ESLint ignores files with "node_modules" paths.
@@ -40,6 +48,30 @@ gulp.task('lint', () => {
 		// To have the process exit with an error code (1) on
 		// lint error, return the stream and pipe to failAfterError last.
 		.pipe(eslint.failAfterError());
+});
+
+gulp.task('serve', gulp.series('styles', 'copy-js', 'copy-html', function () {
+	browserSync.init({
+		server: "./dist"
+	});
+	browserSync.stream();
+
+	gulp.watch('sass/**/*.scss', gulp.series('styles'));
+	gulp.watch('js/**/*.js', gulp.series('lint'));
+	gulp.watch('index.html', gulp.series('copy-html'));
+	gulp.watch("html/*.html").on('change', browserSync.reload);
+}));
+
+
+
+gulp.task('tests', () => {
+
+	gulp.src(['tests/spec/extraSpec.js'])
+		.pipe(jasmine({
+			integration: true,
+			vendor: 'js/**/*.js'
+		}))
+
 });
 
 
