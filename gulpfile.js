@@ -4,7 +4,9 @@ var autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync').create();
 var eslint = require('gulp-eslint');
 var jasmine = require('gulp-jasmine-phantom');
-
+var concat = require('gulp-concat');
+var uglify = require('gulp-uglify');
+var babel = require('gulp-babel');
 
 gulp.task('styles', () => {
 	return gulp.src('sass/**/*.scss')
@@ -23,10 +25,29 @@ gulp.task('copy-js', function () {
 		.pipe(gulp.dest('dist/js'));
 });
 
-gulp.task('copy-html', function () {
+
+gulp.task('scripts', function () {
+	gulp.src('js/**/*.js')
+		.pipe(babel())
+		.pipe(concat('all.js'))
+		.pipe(gulp.dest('dist/js'));
+});
+
+
+gulp.task('scripts-dist', function () {
+	gulp.src('js/**/*.js')
+		.pipe(babel())
+		.pipe(concat('all.js'))
+		.pipe(uglify())
+		.pipe(gulp.dest('dist/js'));
+});
+
+function copy_html() {
 	gulp.src('./index.html')
 		.pipe(gulp.dest('./dist'));
-});
+}
+
+gulp.task('copy-html', gulp.series(copy_html));
 
 gulp.task('copy-image', function () {
 	gulp.src('img/*')
@@ -75,6 +96,15 @@ gulp.task('tests', () => {
 		}))
 
 });
+
+
+gulp.task('dist', gulp.series([
+	'copy-html',
+	'copy-image',
+	'styles',
+	'lint',
+	'scripts-dist'
+]));
 
 
 gulp.task('default', gulp.series('serve'));

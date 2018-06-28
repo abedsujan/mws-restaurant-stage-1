@@ -5,10 +5,10 @@ class DBHelper {
 
   // Register service worker
   static registerSW() {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .then(() => console.log('service worker registered!'));
-    }
+    // if ('serviceWorker' in navigator) {
+    //   navigator.serviceWorker.register('sw.js')
+    //     .then(() => console.log('service worker registered!'));
+    // }
   }
 
   /**
@@ -25,12 +25,21 @@ class DBHelper {
    */
   static fetchRestaurants(callback) {
 
-    fetch(DBHelper.DATABASE_URL)
+
+    fetch(DBHelper.DATABASE_URL, {
+        body: JSON.stringify(data), // data can be `string` or {object}!
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, same-origin, *omit
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
       .then(response => response.json())
       .then(addRestaurants)
       .catch(e => requestError(e));
 
     function addRestaurants(restaurants) {
+      console.log('#-------------####################');
       callback(null, restaurants);
     }
 
