@@ -21,17 +21,28 @@
 
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
     crossorigin="anonymous"></script>
-  <script>
-    $(function () {
-      $("#header").load("html/header.html");
-
-      $("#footer").load("html/footer.html");
-    });
-  </script>
 </head>
 
 <body>
-  <header id="header"></header>
+
+  <header>
+    <!-- Beginning nav -->
+    <nav>
+      <h1>
+        <a href="/">Restaurant Reviews</a>
+      </h1>
+    </nav>
+    <!-- Beginning breadcrumb -->
+    <nav id="breadcrumb-nav" aria-label="Breadcrumb">
+      <ul id="breadcrumb">
+        <li>
+          <a href="/">Home</a>
+        </li>
+      </ul>
+    </nav>
+    <!-- End breadcrumb -->
+    <!-- End nav -->
+  </header>
 
   <main id="maincontent">
     <section id="map-container">
@@ -51,8 +62,12 @@
     </section>
   </main>
 
-  <footer id="footer"></footer>
-
+  <footer>
+    Copyright (c) 201722
+    <a href="/" aria-labelledby="footer">
+      <strong>Restaurant Reviews</strong>
+    </a> All Rights Reserved
+  </footer>
   <script type="text/javascript" src="/js/header.js"></script>
   <script type="text/javascript" src="/js/home_html_fragments.js"></script>
   <script type="text/javascript" src="/js/dbhelper.js"></script>
