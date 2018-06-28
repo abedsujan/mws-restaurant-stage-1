@@ -27,9 +27,6 @@ class DBHelper {
 
 
     fetch(DBHelper.DATABASE_URL, {
-        body: JSON.stringify(data), // data can be `string` or {object}!
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'same-origin', // include, same-origin, *omit
         headers: {
           'Content-Type': 'application/json'
         }
@@ -39,7 +36,6 @@ class DBHelper {
       .catch(e => requestError(e));
 
     function addRestaurants(restaurants) {
-      console.log('#-------------####################');
       callback(null, restaurants);
     }
 
