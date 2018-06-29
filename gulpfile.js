@@ -30,6 +30,7 @@ gulp.task('scripts', function () {
 	return gulp.src('js/**/*.js')
 		.pipe(babel())
 		.pipe(concat('all.js'))
+		.pipe(uglify())
 		.pipe(gulp.dest('dist/js'));
 });
 
