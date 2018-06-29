@@ -7,6 +7,9 @@ var jasmine = require('gulp-jasmine-phantom');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var babel = require('gulp-babel');
+var sourcemaps = require('gulp-sourcemaps');
+var imagemin = require('gulp-imagemin');
+var pngquant = require('imagemin-pngquant');
 
 gulp.task('styles', () => {
 	return gulp.src('sass/**/*.scss')
@@ -30,7 +33,6 @@ gulp.task('scripts', function () {
 	return gulp.src('js/**/*.js')
 		.pipe(babel())
 		.pipe(concat('all.js'))
-		.pipe(uglify())
 		.pipe(gulp.dest('dist/js'));
 });
 
@@ -40,6 +42,7 @@ gulp.task('scripts-dist', function () {
 		.pipe(babel())
 		.pipe(concat('all.js'))
 		.pipe(uglify())
+		.pipe(sourcemaps.write())
 		.pipe(gulp.dest('dist/js'));
 });
 
@@ -55,7 +58,14 @@ gulp.task('copy-image', function () {
 		.pipe(gulp.dest('dist/img'));
 });
 
-
+gulp.task('optimize-images', function	(){
+	return gulp.src('src/img/*')
+        .pipe(imagemin({
+            progressive: true,
+            use: [pngquant()]
+        }))
+        .pipe(gulp.dest('dist/img'));
+})
 
 gulp.task('lint', () => {
 	// ESLint ignores files with "node_modules" paths.
@@ -104,8 +114,9 @@ gulp.task('dist', gulp.series([
 	'copy-image',
 	'styles',
 	'lint',
-	'scripts-dist'
+	'scripts-dist',
+	'optimize-images'
 ]));
 
 
-gulp.task('default', gulp.series('serve'));
+gulp.task('default', gulp.series('serve', 'optimize-images'));
