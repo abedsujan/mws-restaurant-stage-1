@@ -91,7 +91,8 @@ gulp.task('serve', gulp.series('styles', 'copy-js', 'copy-html', function () {
 	browserSync.stream();
 
 	gulp.watch('sass/**/*.scss', gulp.series('styles'));
-	gulp.watch('js/**/*.js', gulp.series('lint'));
+	// gulp.watch('js/**/*.js', gulp.series('lint'));
+	gulp.watch("js/*.js",  gulp.series('copy-js'));
 	gulp.watch('index.html', gulp.series('copy-html'));
 	gulp.watch("html/*.html").on('change', browserSync.reload);
 }));
