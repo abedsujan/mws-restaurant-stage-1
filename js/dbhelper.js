@@ -20,22 +20,73 @@ class DBHelper {
 
   }
 
+  static openDatabase() {
+    // If the browser doesn't support service worker,
+    // we don't care about having a database
+    if (!navigator.serviceWorker) {
+      return Promise.resolve();
+    }
+    return idb.open('RestaurantsDB', 1, function (upgradeDb) {
+      var store = upgradeDb.createObjectStore('restaurants', {
+        keyPath: 'id'
+      });
+      store.createIndex('by-name', 'name');
+    });
+  }
+
+  static saveToDatabase(data) {
+    return DBHelper.openDatabase().then(function (db) {
+      if (!db) return;
+
+      var tx = db.transaction('restaurants', 'readwrite');
+      var store = tx.objectStore('restaurants');
+      data.forEach(function (restaurant) {
+        console.log('res', restaurant);
+        store.put(restaurant);
+      });
+      return tx.complete;
+    });
+  }
+
+  static getCachedRestaurants() {
+    return DBHelper.openDatabase().then(function (db) {
+      if (!db) return;
+
+      var store = db.transaction('restaurants').objectStore('restaurants');
+      return store.getAll();
+    });
+  }
+
+  static readAllData(storeName) {
+    return DBHelper.openDatabase()
+      .then(function (db) {
+        var tx = db.transaction(storeName);
+        var store = tx.objectStore(storeName);
+        return store.getAll();
+      })
+  }
+
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
 
 
-    fetch(DBHelper.DATABASE_URL, {
-        headers: {
-          'Content-Type': 'application/json'
+    return DBHelper.readAllData('restaurants').then(function (restaurants) {
+        if (restaurants.length) {
+          console.log('IDB is being used to fetch data');
+          // console.log(Promise.resolve(restaurants));
+          return Promise.resolve(restaurants);
+        } else {
+          console.log('FetchAPI is used to fetch data ');
+          return DBHelper.fetchRestaurantsFromAPI();
         }
       })
-      .then(response => response.json())
       .then(addRestaurants)
       .catch(e => requestError(e));
 
     function addRestaurants(restaurants) {
+      console.log('all res', restaurants);
       callback(null, restaurants);
     }
 
@@ -44,6 +95,21 @@ class DBHelper {
       callback(error, null);
     }
   }
+
+  static fetchRestaurantsFromAPI() {
+    return fetch(DBHelper.DATABASE_URL, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(function (response) {
+        return response.json();
+      }).then(restaurants => {
+        DBHelper.saveToDatabase(restaurants);
+        return restaurants;
+      });
+  }
+
 
   /**
    * Fetch a restaurant by its ID.
