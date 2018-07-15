@@ -44,8 +44,8 @@ fillReviewsHTML = (reviews) => {
     const container = document.getElementById('reviews-container');
 
     const containerInnerHTML = `
-      <h3>Reviews</h3>
-      ${ (!reviews) ? '<p>No reviews yet!</p>': createReviewListHTML(reviews) }
+      <h3 class="review-head">Reviews</h3>
+      ${ (!reviews) ? '<p>No reviews yet!</p>': `<ul id="reviews-list"> ${createReviewListHTML(reviews)}</ul>` }
     `;
 
     container.insertAdjacentHTML('beforeend', containerInnerHTML);
@@ -56,12 +56,12 @@ fillReviewsHTML = (reviews) => {
  * Create review list HTML and add it to the container.
  */
 createReviewListHTML = (reviews) => {
-    const ul = document.getElementById('reviews-list');
+    let li = '';
     reviews.forEach(review => {
-        ul.insertAdjacentHTML('beforeend', createReviewHTML(review));
+        li += createReviewHTML(review);
     });
 
-    return ul;
+    return li;
 }
 
 //Create review HTML and add it to the list ul 
