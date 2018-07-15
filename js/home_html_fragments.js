@@ -25,10 +25,14 @@ fillCuisinesHTML = (cuisines) => {
  * Create restaurant HTML.
  */
 createRestaurantHTML = (restaurant) => {
+  const responsiveImages = DBHelper.imageUrlsForRestaurant(restaurant);
+  
   const li = document.createElement('li');
   li.insertAdjacentHTML('beforeend', `
     <picture>
-      <img class="restaurant-img" src="${DBHelper.imageUrlForRestaurant(restaurant)}" alt="Image of ${restaurant.photograph_alt} Restaurant">
+      <source media="(min-width: 800px)" srcset="${responsiveImages.large}">
+      <source media="(min-width: 400px)" srcset="${responsiveImages.small}">
+      <img class="restaurant-img" src="${responsiveImages.small}" srcset="${responsiveImages.small}" alt="Image of ${restaurant.name} Restaurant">
     </picture>
     <h3>${restaurant.name}</h3>
     <p>${restaurant.neighborhood}</p>

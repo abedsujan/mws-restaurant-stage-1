@@ -18,12 +18,15 @@ fillRestaurantHTML = (restaurant) => {
 }
 
 createRestaurantViewHTML = (restaurant) => {
-
+    const responsiveImages = DBHelper.imageUrlsForRestaurant(restaurant);
     const restaurantHTML = `
     <h2 id="restaurant-name">${restaurant.name}</h2>
     <picture id="restaurant-img">
-      <img class="restaurant-img" src="${DBHelper.imageUrlForRestaurant(restaurant)}" alt="Image of ${restaurant.photograph_alt} Restaurant">
+        <source media="(min-width: 800px)" srcset="${responsiveImages.large}">
+        <source media="(min-width: 400px)" srcset="${responsiveImages.small}">
+        <img class="restaurant-img" src="${responsiveImages.regular}" srcset="${responsiveImages.regular}" alt="Image of ${restaurant.name} Restaurant">
     </picture>
+
     <p id="restaurant-cuisine">${restaurant.cuisine_type}</p>
   `;
     return restaurantHTML;

@@ -229,6 +229,29 @@ class DBHelper {
   }
 
   /**
+   * Restaurant image URLs JSON.
+   */
+  static imageUrlsForRestaurant(restaurant) {
+    const representationsURLs = DBHelper.imageRepresentationsPaths(restaurant.photograph);
+    return representationsURLs;
+  }
+  /**
+   * Paths for various image representations
+   */
+  static imageRepresentationsPaths(filename) {
+    const [folderName, suffix] = ['./img/', 'jpg'] //,'webp'];
+    const small = folderName.concat(filename, '_w_400', '.', suffix);
+    const large = folderName.concat(filename, '_w_800', '.', suffix);
+    const regular = folderName.concat(filename, '.', suffix);
+
+    return {
+      small: small,
+      large: large,
+      regular: regular
+    };
+  }
+
+  /**
    * Return set of responsive restaurant JPG images
    */
   static imageSourceForRestaurant(restaurant) {
