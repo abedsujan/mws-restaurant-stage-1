@@ -1,5 +1,9 @@
+var distDir = './dist';
+
 var gulp = require('gulp');
 var sass = require('gulp-sass');
+var runSequence = require('run-sequence');
+var clean = require('gulp-clean');
 var autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync').create();
 var eslint = require('gulp-eslint');
@@ -11,61 +15,13 @@ var sourcemaps = require('gulp-sourcemaps');
 var imagemin = require('gulp-imagemin');
 var pngquant = require('imagemin-pngquant');
 
-gulp.task('styles', () => {
-	return gulp.src('sass/**/*.scss')
-		.pipe(sass({
-			outputStyle: 'compressed'
-		}).on('error', sass.logError))
-		.pipe(autoprefixer({
-			browsers: ['last 2 versions']
-		}))
-		.pipe(gulp.dest('dist/css'))
-		.pipe(browserSync.stream());;
-});
+var fs = require('fs');
+var gzip = require('gulp-gzip');
+var webp = require('gulp-webp');
 
-gulp.task('copy-js', function () {
-	return gulp.src('js/**/*.js')
-		.pipe(gulp.dest('dist/js'));
-});
-
-
-gulp.task('scripts', function () {
-	return gulp.src('js/**/*.js')
-		.pipe(babel())
-		.pipe(concat('all.js'))
-		.pipe(gulp.dest('dist/js'));
-});
-
-
-gulp.task('scripts-dist', function () {
-	return gulp.src('js/**/*.js')
-		.pipe(babel())
-		.pipe(concat('all.js'))
-		.pipe(uglify())
-		.pipe(sourcemaps.write())
-		.pipe(gulp.dest('dist/js'));
-});
-
-function copy_html() {
-	return gulp.src('./*.html')
-		.pipe(gulp.dest('./dist'));
+if (fs.existsSync(distDir)) {
+	var middleware = require('connect-gzip-static')(distDir);
 }
-
-gulp.task('copy-html', copy_html);
-
-gulp.task('copy-image', function () {
-	return gulp.src('img/*')
-		.pipe(gulp.dest('dist/img'));
-});
-
-gulp.task('optimize-images', function	(){
-	return gulp.src('src/img/*')
-        .pipe(imagemin({
-            progressive: true,
-            use: [pngquant()]
-        }))
-        .pipe(gulp.dest('dist/img'));
-})
 
 gulp.task('lint', () => {
 	// ESLint ignores files with "node_modules" paths.
@@ -84,40 +40,178 @@ gulp.task('lint', () => {
 		.pipe(eslint.failAfterError());
 });
 
-gulp.task('serve', gulp.series('styles', 'copy-js', 'copy-html', function () {
+function clean_scripts() {
+	return gulp
+		.src([distDir], {
+			read: false
+		})
+		.pipe(clean({
+			force: true
+		}));
+}
+
+function build_html() {
+	return gulp
+		.src('./**/*.html')
+		.pipe(gulp.dest(distDir));
+}
+
+function build_styles() {
+	return gulp
+		.src('sass/**/*.scss')
+		.pipe(sass({
+			outputStyle: 'compressed'
+		}).on('error', sass.logError))
+		.pipe(autoprefixer({
+			browsers: ['last 2 versions']
+		}))
+		.pipe(gulp.dest('dist/css'))
+		.pipe(browserSync.stream());;
+}
+
+function build_scripts() {
+	return gulp
+		.src('js/**/*.js')
+		.pipe(gulp.dest('dist/js'));
+
+	// return gulp.src('js/**/*.js')
+	// .pipe(babel())
+	// .pipe(concat('all.js'))
+	// .pipe(uglify())
+	// .pipe(sourcemaps.write())
+	// .pipe(gulp.dest('dist/js'));
+}
+
+function build_images() {
+	return gulp
+		.src('img/**/*')
+		.pipe(imagemin({
+			progressive: true,
+			use: [pngquant()]
+		}))
+		.pipe(gulp.dest('dist/img'));
+}
+
+function browsersync_reload(done) {
+	browserSync.reload();
+	done();
+}
+
+function watch_scripts() {
+	gulp.watch('sass/**/*.scss', gulp.series('build-styles', 'browsersync-reload'));
+	gulp.watch("js/*.js", gulp.series('build-scripts', 'browsersync-reload'));
+	gulp.watch('/*.html', gulp.series('build-html', 'browsersync-reload'));
+	gulp.watch("html/*.html", gulp.series('build-html', 'browsersync-reload'));
+}
+
+function copy_static_files() {
+	return gulp.src(['sw.js', './manifest.json'])
+		.pipe(gulp.dest(distDir));
+}
+
+function compress_html() {
+	return gulp.src(distDir + '/*.html')
+		.pipe(gzip())
+		.pipe(gulp.dest(distDir));
+}
+
+function clean_unused_html() {
+	return gulp
+		.src([distDir + '/*.html'], {
+			read: false
+		})
+		.pipe(clean());
+}
+
+function compress_css() {
+	return gulp.src(distDir + '/css/*.css')
+		.pipe(gzip())
+		.pipe(gulp.dest(distDir + '/css'));
+}
+
+function clean_unused_css() {
+	return gulp
+		.src([distDir + '/css/*.css'], {
+			read: false
+		})
+		.pipe(clean());
+}
+
+function ompress_js() {
+	return gulp.src(distDir + '/js/*.js')
+		.pipe(gzip())
+		.pipe(gulp.dest(distDir + '/js'));
+}
+
+function clean_unused_js() {
+	return gulp
+		.src([distDir + '/js/*.js'], {
+			read: false
+		})
+		.pipe(clean());
+}
+
+
+gulp.task('clean', clean_scripts);
+gulp.task('build-html', build_html);
+gulp.task('build-styles', build_styles);
+gulp.task('build-scripts', build_scripts);
+gulp.task('build-images', build_images);
+gulp.task('watch', watch_scripts);
+gulp.task('browsersync-reload', browsersync_reload);
+gulp.task('copy-static', copy_static_files);
+
+gulp.task('compress-html', compress_html);
+gulp.task('compress-css', compress_css);
+gulp.task('compress-js', ompress_js);
+gulp.task('clean-unused-html', clean_unused_html);
+gulp.task('clean-unused-css', clean_unused_css);
+gulp.task('clean-unused-js', clean_unused_js);
+
+gulp.task('build', gulp.series([
+	'clean',
+	'build-html',
+	'build-styles',
+	'build-scripts',
+	'build-images',
+	'copy-static'
+]));
+
+gulp.task('compress', gulp.series([
+	'compress-html',
+	'compress-css',
+	'compress-js',
+	'clean-unused-html',
+	'clean-unused-css',
+	'clean-unused-js'
+]));
+
+gulp.task('serve-dev', gulp.series('build', function () {
 	browserSync.init({
 		server: "./dist"
 	});
 	browserSync.stream();
+}));
 
-	gulp.watch('sass/**/*.scss', gulp.series('styles'));
-	// gulp.watch('js/**/*.js', gulp.series('lint'));
-	gulp.watch("js/*.js",  gulp.series('copy-js'));
-	gulp.watch('index.html', gulp.series('copy-html'));
-	gulp.watch("html/*.html").on('change', browserSync.reload);
+
+gulp.task('serve', gulp.series('build', function () {
+	browserSync.init({
+		server: {
+			baseDir: distDir,
+			index: 'index.html',
+			files: [
+				distDir + '/*.html.gz',
+				distDir + '/css/*.css.gz',
+				distDir + '/js/*.js.gz'
+			]
+		}
+	}, function (err, bs) {
+		bs.addMiddleware('*', middleware, {
+			override: true
+		});
+	});
 }));
 
 
 
-gulp.task('tests', () => {
-
-	gulp.src(['tests/spec/extraSpec.js'])
-		.pipe(jasmine({
-			integration: true,
-			vendor: 'js/**/*.js'
-		}))
-
-});
-
-
-gulp.task('dist', gulp.series([
-	'copy-html',
-	'copy-image',
-	'styles',
-	'lint',
-	'scripts-dist',
-	'optimize-images'
-]));
-
-
-gulp.task('default', gulp.series('serve', 'optimize-images'));
+gulp.task('default', gulp.series('build', 'serve-dev', 'watch'));
