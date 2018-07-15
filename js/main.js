@@ -11,7 +11,6 @@ window.onload = () => {
 window.initMap = () => {
   fillMap();
   updateRestaurants();
-  fillBreadcrumb();
 }
 
 fillMap = () => {

@@ -232,7 +232,8 @@ class DBHelper {
    * Restaurant image URLs JSON.
    */
   static imageUrlsForRestaurant(restaurant) {
-    const representationsURLs = DBHelper.imageRepresentationsPaths(restaurant.photograph);
+    const photograph = restaurant.photograph ? restaurant.photograph : 'NoImage';
+    const representationsURLs = DBHelper.imageRepresentationsPaths(photograph);
     return representationsURLs;
   }
   /**
