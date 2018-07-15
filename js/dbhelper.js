@@ -5,10 +5,10 @@ class DBHelper {
 
   // Register service worker
   static registerSW() {
-    // if ('serviceWorker' in navigator) {
-    //   navigator.serviceWorker.register('sw.js')
-    //     .then(() => console.log('service worker registered!'));
-    // }
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('service worker registered!'));
+    }
   }
 
   /**
@@ -71,14 +71,10 @@ class DBHelper {
    */
   static fetchRestaurants(callback) {
 
-
     return DBHelper.readAllData('restaurants').then(function (restaurants) {
         if (restaurants.length) {
-          console.log('IDB is being used to fetch data');
-          // console.log(Promise.resolve(restaurants));
           return Promise.resolve(restaurants);
         } else {
-          console.log('FetchAPI is used to fetch data ');
           return DBHelper.fetchRestaurantsFromAPI();
         }
       })
@@ -86,7 +82,6 @@ class DBHelper {
       .catch(e => requestError(e));
 
     function addRestaurants(restaurants) {
-      console.log('all res', restaurants);
       callback(null, restaurants);
     }
 

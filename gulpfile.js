@@ -99,9 +99,9 @@ function browsersync_reload(done) {
 
 function watch_scripts() {
 	gulp.watch('sass/**/*.scss', gulp.series('build-styles', 'browsersync-reload'));
-	gulp.watch("js/*.js", gulp.series('build-scripts', 'browsersync-reload'));
+	gulp.watch('js/*.js', gulp.series('build-scripts', 'browsersync-reload'));
 	gulp.watch('/*.html', gulp.series('build-html', 'browsersync-reload'));
-	gulp.watch("html/*.html", gulp.series('build-html', 'browsersync-reload'));
+	gulp.watch(['sw.js', 'manifest.json'], gulp.series('copy-static', 'browsersync-reload'));
 }
 
 function copy_static_files() {
