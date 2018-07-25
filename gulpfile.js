@@ -169,7 +169,7 @@ gulp.task('clean-unused-css', clean_unused_css);
 gulp.task('clean-unused-js', clean_unused_js);
 
 gulp.task('build', gulp.series([
-	'clean',
+	// 'clean',
 	'build-html',
 	'build-styles',
 	'build-scripts',
