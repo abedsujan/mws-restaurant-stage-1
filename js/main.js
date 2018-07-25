@@ -9,8 +9,10 @@ window.onload = () => {
  * Initialize Google map, called from HTML.
  */
 window.initMap = () => {
-  fillMap();
-  updateRestaurants();
+  if (location.pathname == "/") {
+    fillMap();
+    updateRestaurants();
+  }
 }
 
 fillMap = () => {
@@ -86,8 +88,10 @@ addMarkersToMap = (restaurants = self.restaurants) => {
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
-  fetchNeighborhoods();
-  fetchCuisines();
+  if (location.pathname == "/") {
+    fetchNeighborhoods();
+    fetchCuisines();
+  }
 });
 
 /**

@@ -14,6 +14,8 @@ var babel = require('gulp-babel');
 var sourcemaps = require('gulp-sourcemaps');
 var imagemin = require('gulp-imagemin');
 var pngquant = require('imagemin-pngquant');
+var inject = require('gulp-inject');
+var del = require('del');
 
 var fs = require('fs');
 var gzip = require('gulp-gzip');
@@ -41,13 +43,9 @@ gulp.task('lint', () => {
 });
 
 function clean_scripts() {
-	return gulp
-		.src([distDir], {
-			read: false
-		})
-		.pipe(clean({
-			force: true
-		}));
+	return del(['dist/**', './js/bundle.js'], {
+		force: true
+	});
 }
 
 function build_html() {
@@ -72,13 +70,17 @@ function build_styles() {
 function build_scripts() {
 	return gulp
 		.src('js/**/*.js')
-		.pipe(gulp.dest('dist/js'));
+		.pipe(concat('bundle.js'))
+		.pipe(gulp.dest('./js'))
+		.pipe(gulp.dest('./dist/js'));
 
-	// return gulp.src('js/**/*.js')
-	// .pipe(babel())
-	// .pipe(concat('all.js'))
-	// .pipe(uglify())
-	// .pipe(sourcemaps.write())
+	// return gulp.src(['js/dbhelper.js', 'js/idb.js', 'js/home_html_fragments.js', 'js/main.js'])
+	// .pipe(concat('bundle_main.js'))
+	// .pipe(gulp.dest('./js'))
+	// .pipe(gulp.dest('dist/js'))
+	// .pipe(gulp.src(['js/dbhelper.js', 'js/idb.js', 'js/info_html_fragments.js', 'js/restaurant_info.js']))
+	// .pipe(concat('bundle_restaurant_info.js'))
+	// .pipe(gulp.dest('./js'))
 	// .pipe(gulp.dest('dist/js'));
 }
 
@@ -97,6 +99,8 @@ function browsersync_reload(done) {
 	done();
 }
 
+
+
 function watch_scripts() {
 	gulp.watch('sass/**/*.scss', gulp.series('build-styles', 'browsersync-reload'));
 	gulp.watch('js/*.js', gulp.series('build-scripts', 'browsersync-reload'));
@@ -107,6 +111,12 @@ function watch_scripts() {
 function copy_static_files() {
 	return gulp.src(['sw.js', './manifest.json'])
 		.pipe(gulp.dest(distDir));
+}
+
+function js_minify() {
+	return gulp.src(distDir + '/**/*.js')
+		.pipe(concat('all.js'))
+		.pipe(gulp.dest(distDir + '/js'));
 }
 
 function compress_html() {
@@ -137,7 +147,7 @@ function clean_unused_css() {
 		.pipe(clean());
 }
 
-function ompress_js() {
+function compress_js() {
 	return gulp.src(distDir + '/js/*.js')
 		.pipe(gzip())
 		.pipe(gulp.dest(distDir + '/js'));
@@ -152,10 +162,35 @@ function clean_unused_js() {
 }
 
 
+gulp.task('index', function () {
+	var target = gulp.src('./index.html');
+	// It's not necessary to read the files (will speed up things), we're only after their paths:
+	var sources = gulp.src(['./js/bundle.js'], {
+		read: false
+	});
+
+	return target.pipe(inject(sources))
+		.pipe(gulp.dest('./dist'));
+
+});
+
+gulp.task('restaurant', function () {
+	var target = gulp.src('./restaurant.html');
+	// It's not necessary to read the files (will speed up things), we're only after their paths:
+	var sources = gulp.src(['./js/bundle.js'], {
+		read: false
+	});
+
+	return target.pipe(inject(sources))
+		.pipe(gulp.dest('./dist'));
+
+});
+
 gulp.task('clean', clean_scripts);
 gulp.task('build-html', build_html);
 gulp.task('build-styles', build_styles);
 gulp.task('build-scripts', build_scripts);
+gulp.task('js-minify', js_minify);
 gulp.task('build-images', build_images);
 gulp.task('watch', watch_scripts);
 gulp.task('browsersync-reload', browsersync_reload);
@@ -163,18 +198,21 @@ gulp.task('copy-static', copy_static_files);
 
 gulp.task('compress-html', compress_html);
 gulp.task('compress-css', compress_css);
-gulp.task('compress-js', ompress_js);
+gulp.task('compress-js', compress_js);
 gulp.task('clean-unused-html', clean_unused_html);
 gulp.task('clean-unused-css', clean_unused_css);
 gulp.task('clean-unused-js', clean_unused_js);
 
+
 gulp.task('build', gulp.series([
-	// 'clean',
+	'clean',
 	'build-html',
 	'build-styles',
 	'build-scripts',
 	'build-images',
-	'copy-static'
+	'copy-static',
+	'index',
+	'restaurant'
 ]));
 
 gulp.task('compress', gulp.series([
@@ -194,7 +232,7 @@ gulp.task('serve-dev', gulp.series('build', function () {
 }));
 
 
-gulp.task('serve', gulp.series('build', function () {
+gulp.task('serve', gulp.series('build', 'compress', function () {
 	browserSync.init({
 		server: {
 			baseDir: distDir,
@@ -211,6 +249,8 @@ gulp.task('serve', gulp.series('build', function () {
 		});
 	});
 }));
+
+
 
 
 
