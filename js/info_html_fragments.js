@@ -13,8 +13,6 @@ const fillRestaurantHTML = (restaurant) => {
     if (restaurant.operating_hours) {
         fillRestaurantHoursHTML(restaurant.operating_hours);
     }
-    // fill reviews
-    fillReviewsHTML(restaurant.reviews);
 }
 
 const createRestaurantViewHTML = (restaurant) => {

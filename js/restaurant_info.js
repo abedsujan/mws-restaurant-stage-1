@@ -3,7 +3,7 @@
  */
 const fetchRestaurantFromURL = (callback) => {
   if (self.restaurant) { // restaurant already fetched!
-    callback(null, self.restaurant)
+    callback(null, self.restaurant);
     return;
   }
   const id = getParameterByName('id');
@@ -13,16 +13,32 @@ const fetchRestaurantFromURL = (callback) => {
   } else {
     DBHelper.fetchRestaurantById(id, (error, restaurant) => {
       self.restaurant = restaurant;
+
+      console.log('fetchRestaurantFromURL :', restaurant);
+
       if (!restaurant) {
         console.error(error);
         return;
       }
 
-      console.log('##### restaurant  ####', restaurant);
-      
       fillRestaurantHTML(restaurant);
       callback(null, restaurant)
     });
+
+    ReviewDBHelper.fetchReviewByRestaurantId(id, (error, reviews) => {
+      self.reviews = reviews;
+
+      console.log('fetchRestaurantFromURL :', reviews);
+
+      if (!reviews) {
+        console.error(error);
+        return;
+      }
+      // fill reviews
+      fillReviewsHTML(reviews);
+      callback(null, reviews)
+    });
+
   }
 };
 

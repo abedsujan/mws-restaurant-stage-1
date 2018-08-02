@@ -2,23 +2,32 @@
  * Common database helper functions.
  */
 class DBHelper {
-
-  // Register service worker
-  static registerSW() {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .then(() => console.log('service worker registered!'));
-    }
-  }
-
   /**
    * Database URL.
    */
   static get DATABASE_URL() {
     const port = 1337;
-    return `http://localhost:${port}/restaurants`;
-
+    return `http://localhost:${port}`;
   }
+
+  static fetchRestaurantsFromAPI(query_params) {
+
+    const fetch_url = (query_params) ? RESTAURANT_ENDPOINT + query_params : RESTAURANT_ENDPOINT;
+    
+    return fetch(fetch_url, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(function (response) {
+        return response.json();
+      }).then(restaurants => {
+        DBHelper.saveToDatabase(restaurants);
+
+        return restaurants;
+      });
+  }
+
 
   static openDatabase() {
     // If the browser doesn't support service worker,
@@ -40,17 +49,24 @@ class DBHelper {
 
       var tx = db.transaction('restaurants', 'readwrite');
       var store = tx.objectStore('restaurants');
-      data.forEach(function (restaurant) {
-        console.log('res', restaurant);
-        store.put(restaurant);
-      });
+
+      if (Array.isArray(data)) {
+        data.forEach(function (restaurant) {
+          store.put(restaurant);
+        });
+      } else {
+        store.put(data);
+      }
+
       return tx.complete;
     });
   }
 
   static getCachedRestaurants() {
     return DBHelper.openDatabase().then(function (db) {
-      if (!db) return;
+      if (!db) {
+        return;
+      }
 
       var store = db.transaction('restaurants').objectStore('restaurants');
       return store.getAll();
@@ -65,6 +81,12 @@ class DBHelper {
         return store.getAll();
       })
   }
+
+  static readDataById(storeName) {
+    // TODO:
+    return Promise.resolve([]);
+  }
+
 
   /**
    * Fetch all restaurants.
@@ -91,38 +113,32 @@ class DBHelper {
     }
   }
 
-  static fetchRestaurantsFromAPI() {
-    return fetch(DBHelper.DATABASE_URL, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(function (response) {
-        return response.json();
-      }).then(restaurants => {
-        DBHelper.saveToDatabase(restaurants);
-        return restaurants;
-      });
-  }
-
-
   /**
    * Fetch a restaurant by its ID.
    */
   static fetchRestaurantById(id, callback) {
-    // fetch all restaurants with proper error handling.
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        const restaurant = restaurants.find(r => r.id == id);
-        if (restaurant) { // Got the restaurant
-          callback(null, restaurant);
-        } else { // Restaurant does not exist in the database
-          callback('Restaurant does not exist', null);
+
+    return DBHelper.readDataById('restaurants').then(function (restaurant) {
+        if (restaurant.length) {
+          return Promise.resolve(restaurant);
+        } else {
+          console.log('fetch from fetchRestaurantsFromAPI');
+          return DBHelper.fetchRestaurantsFromAPI(id);
         }
-      }
-    });
+      })
+      .then(addRestaurants)
+      .catch(e => requestError(e));
+
+    // restaurant.reviews = ReviewDBHelper.fetchReviewByRestaurantId(id, callback);
+
+    function addRestaurants(restaurants) {
+      callback(null, restaurants);
+    }
+
+    function requestError(e) {
+      const error = (`Request failed. ${e}`);
+      callback(error, null);
+    }
   }
 
   /**
