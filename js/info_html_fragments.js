@@ -1,7 +1,7 @@
 /**
  * Create restaurant HTML and add it to the webpage
  */
-fillRestaurantHTML = (restaurant) => {
+const fillRestaurantHTML = (restaurant) => {
 
     const restaurantContainer = document.getElementById('restaurant-container');
     restaurantContainer.innerHTML = createRestaurantViewHTML(restaurant);
@@ -17,7 +17,7 @@ fillRestaurantHTML = (restaurant) => {
     fillReviewsHTML(restaurant.reviews);
 }
 
-createRestaurantViewHTML = (restaurant) => {
+const createRestaurantViewHTML = (restaurant) => {
     const responsiveImages = DBHelper.imageUrlsForRestaurant(restaurant);
     const restaurantHTML = `
     <h2 id="restaurant-name">${restaurant.name}</h2>
@@ -32,7 +32,7 @@ createRestaurantViewHTML = (restaurant) => {
     return restaurantHTML;
 }
 
-createRestaurantAddressHTML = (address) => {
+const createRestaurantAddressHTML = (address) => {
     const addressHTML = `
         <h3>Address</h3>
         <p>${address}</p>
@@ -43,7 +43,7 @@ createRestaurantAddressHTML = (address) => {
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-fillReviewsHTML = (reviews) => {
+const fillReviewsHTML = (reviews) => {
     const container = document.getElementById('reviews-container');
 
     const containerInnerHTML = `
@@ -58,7 +58,7 @@ fillReviewsHTML = (reviews) => {
 /**
  * Create review list HTML and add it to the container.
  */
-createReviewListHTML = (reviews) => {
+const createReviewListHTML = (reviews) => {
     let li = '';
     reviews.forEach(review => {
         li += createReviewHTML(review);
@@ -68,7 +68,7 @@ createReviewListHTML = (reviews) => {
 }
 
 //Create review HTML and add it to the list ul 
-createReviewHTML = (review) => {
+const createReviewHTML = (review) => {
     const reviewHTML = `
       <li>
         <div class="review-header">
@@ -89,7 +89,7 @@ createReviewHTML = (review) => {
 /**
  * Create restaurant operating hours HTML table and add it to the webpage.
  */
-fillRestaurantHoursHTML = (operatingHours) => {
+const fillRestaurantHoursHTML = (operatingHours) => {
     const openingHourDiv = document.getElementById('opening-hours');
 
     const openingHourDivInnerHTML = `
@@ -100,7 +100,7 @@ fillRestaurantHoursHTML = (operatingHours) => {
 }
 
 // Create restaurant days opening hours 
-createOpeningHourHTML = (operatingHours) => {
+const createOpeningHourHTML = (operatingHours) => {
     let tableRowsHTML = '<table>';
     for (const key in operatingHours) {
         tableRowsHTML += `<tr>

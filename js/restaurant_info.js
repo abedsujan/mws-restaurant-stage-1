@@ -1,12 +1,7 @@
-// Register service worker
-window.onload = () => {
-  DBHelper.registerSW();
-};
-
 /**
  * Get current restaurant from page URL.
  */
-fetchRestaurantFromURL = (callback) => {
+const fetchRestaurantFromURL = (callback) => {
   if (self.restaurant) { // restaurant already fetched!
     callback(null, self.restaurant)
     return;
@@ -22,6 +17,9 @@ fetchRestaurantFromURL = (callback) => {
         console.error(error);
         return;
       }
+
+      console.log('##### restaurant  ####', restaurant);
+      
       fillRestaurantHTML(restaurant);
       callback(null, restaurant)
     });
@@ -31,17 +29,20 @@ fetchRestaurantFromURL = (callback) => {
 /**
  * Get a parameter by name from page URL.
  */
-getParameterByName = (name, url) => {
-  if (!url)
-    url = window.location.href;
+const getParameterByName = (name) => {
+  const url = window.location.href;
 
   name = name.replace(/[\[\]]/g, '\\$&');
   const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
   const results = regex.exec(url);
 
-  if (!results)
+  if (!results) {
     return null;
-  if (!results[2])
+  }
+
+  if (!results[2]) {
     return '';
+  }
+
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 };

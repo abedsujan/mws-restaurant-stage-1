@@ -1,7 +1,7 @@
 /**
  * Set neighborhoods HTML.
  */
-fillNeighborhoodsHTML = (neighborhoods) => {
+const fillNeighborhoodsHTML = (neighborhoods) => {
   const select = document.getElementById('neighborhoods-select');
   neighborhoods.forEach(neighborhood => {
     const option = `<option value="${neighborhood}">${neighborhood}</option>`;
@@ -12,7 +12,7 @@ fillNeighborhoodsHTML = (neighborhoods) => {
 /**
  * Set cuisines HTML.
  */
-fillCuisinesHTML = (cuisines) => {
+const fillCuisinesHTML = (cuisines) => {
   const select = document.getElementById('cuisines-select');
 
   cuisines.forEach(cuisine => {
@@ -24,7 +24,7 @@ fillCuisinesHTML = (cuisines) => {
 /**
  * Create restaurant HTML.
  */
-createRestaurantHTML = (restaurant) => {
+const createRestaurantHTML = (restaurant) => {
   const responsiveImages = DBHelper.imageUrlsForRestaurant(restaurant);
   
   const li = document.createElement('li');

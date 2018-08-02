@@ -68,8 +68,22 @@ function build_styles() {
 }
 
 function build_scripts() {
+
+	const js_files = [
+		'./js/idb.js',
+		'./js/dbhelper.js',
+		'./js/init.js',
+		'./js/review_db_helper.js',
+		'./js/header.js',
+		'./js/home_html_fragments.js',
+		'./js/info_html_fragments.js',
+		'./js/main.js',
+		'./js/restaurant_info.js'
+	];
+
 	return gulp
-		.src('js/**/*.js')
+		.src(js_files)
+		.pipe(babel())
 		.pipe(concat('bundle.js'))
 		.pipe(gulp.dest('./js'))
 		.pipe(gulp.dest('./dist/js'));
@@ -103,7 +117,7 @@ function browsersync_reload(done) {
 
 function watch_scripts() {
 	gulp.watch('sass/**/*.scss', gulp.series('build-styles', 'browsersync-reload'));
-	gulp.watch('js/*.js', gulp.series('build-scripts', 'browsersync-reload'));
+	gulp.watch('./js/*.js', gulp.series('build-scripts', 'browsersync-reload'));
 	gulp.watch('/*.html', gulp.series('build-html', 'browsersync-reload'));
 	gulp.watch(['sw.js', 'manifest.json'], gulp.series('copy-static', 'browsersync-reload'));
 }

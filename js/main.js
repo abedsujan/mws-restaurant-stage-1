@@ -1,11 +1,6 @@
 var markers = [];
 var map;
 
-// Register service worker
-window.onload = () => {
-  DBHelper.registerSW();
-};
-
 /**
  * Initialize Google map, called from HTML.
  */
@@ -33,7 +28,7 @@ window.initMap = () => {
   }
 }
 
-fillMap = () => {
+const fillMap = () => {
   let loc = {
     lat: 40.722216,
     lng: -73.987501
@@ -48,7 +43,7 @@ fillMap = () => {
 /**
  * Update page and map for current restaurants.
  */
-updateRestaurants = () => {
+const updateRestaurants = () => {
   const cuisine = $("#cuisines-select option:selected").val();
   const neighborhood = $("#neighborhoods-select option:selected").val();
 
@@ -65,7 +60,7 @@ updateRestaurants = () => {
 /**
  * Clear current restaurants, their HTML and remove their map markers.
  */
-resetRestaurants = (restaurants) => {
+const resetRestaurants = (restaurants) => {
   // Remove all restaurants
   self.restaurants = [];
   const ul = document.getElementById('restaurants-list');
@@ -80,7 +75,7 @@ resetRestaurants = (restaurants) => {
 /**
  * Create all restaurants HTML and add them to the webpage.
  */
-fillRestaurantsHTML = (restaurants = self.restaurants) => {
+const fillRestaurantsHTML = (restaurants = self.restaurants) => {
   const ul = document.getElementById('restaurants-list');
   restaurants.forEach(restaurant => {
     ul.append(createRestaurantHTML(restaurant));
@@ -91,7 +86,7 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 /**
  * Add markers for current restaurants to the map.
  */
-addMarkersToMap = (restaurants = self.restaurants) => {
+const addMarkersToMap = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     // Add marker to the map
     const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.map);
@@ -115,7 +110,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 /**
  * Fetch all neighborhoods and set their HTML.
  */
-fetchNeighborhoods = () => {
+const fetchNeighborhoods = () => {
   DBHelper.fetchNeighborhoods((error, neighborhoods) => {
     if (error) { // Got an error
       console.error(error);
@@ -128,7 +123,7 @@ fetchNeighborhoods = () => {
 /**
  * Fetch all cuisines and set their HTML.
  */
-fetchCuisines = () => {
+const fetchCuisines = () => {
   DBHelper.fetchCuisines((error, cuisines) => {
     if (error) { // Got an error!
       console.error(error);

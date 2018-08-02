@@ -1,7 +1,7 @@
 /**
  * Add restaurant name to the breadcrumb navigation menu
  */
-fillBreadcrumb = (restaurant = self.restaurant) => {
+const fillBreadcrumb = (restaurant = self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   // Show breadcrumb menu in pages except path is root/homepage
   if (location.pathname == "/") {
