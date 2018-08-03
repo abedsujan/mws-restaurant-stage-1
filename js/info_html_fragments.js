@@ -67,12 +67,17 @@ const createReviewListHTML = (reviews) => {
 
 //Create review HTML and add it to the list ul 
 const createReviewHTML = (review) => {
-    const reviewHTML = `
+    let review_date;
+    if (review.createdAt !== null && review.createdAt !== undefined) {
+        review_date = new Date(review.createdAt).toLocaleString();
+    }
+
+    const reviewHTML = `    
       <li>
         <div class="review-header">
           <div class="reviewer">
             <h3>${review.name}</h3>
-            <span class="review-date">${review.date}</span>
+            <span class="review-date">${review_date}</span>
           </div>
           <div class="review-rating">Rating: ${review.rating}</div>
         </div>
