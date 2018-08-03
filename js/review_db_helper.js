@@ -18,13 +18,6 @@ class ReviewDBHelper {
     return Promise.resolve([]);
   }
 
-  static addReviews(reviews) {
-
-    console.log();
-    callback(null, reviews);
-  }
-
-
   static fetchReviewsFromAPI(query_params) {
 
     return fetch(REVIEW_ENDPOINT + query_params, {
@@ -41,85 +34,79 @@ class ReviewDBHelper {
   }
 
   /**
-   * Fetch all restaurants.
+   * Fetch all reviews
    */
   static fetchReviews(callback) {
 
     return DBHelper.readAllData('reviews').then(function (reviews) {
-        if (restaurants.length) {
+        if (reviews.length) {
           return Promise.resolve(reviews);
         } else {
           return DBHelper.fetchReviewsFromAPI();
         }
       })
-      .then(ReviewDBHelper.addReviews)
+      .then(addReviews)
       .catch(e => requestError(e));
 
-      function requestError(e) {
-        const error = (`Request failed. ${e}`);
-        callback(error, null);
-      }
-  
+    function addReviews(reviews) {
+      callback(null, reviews);
+    }
+
+    function requestError(e) {
+      const error = (`Request failed. ${e}`);
+      callback(error, null);
+    }
   }
 
   /**
    * Fetch a review by its ID.
    */
   static fetchReviewById(id, callback) {
-    // fetch all restaurants with proper error handling.
-
-    console.log('>>>>fetchRestaurantBy<<<<<<');
-    const query_params = id;
-
 
     return DBHelper.readDataById('restaurants').then(function (restaurant) {
         if (restaurant.length) {
           return Promise.resolve(restaurant);
         } else {
-          console.log('fetch from fetchRestaurantsFromAPI');
-          return ReviewDBHelper.fetchReviewsFromAPI(query_params);
-        }
-      })
-      .then(ReviewDBHelper.addReviews)
-      .catch(e => requestError(e));
-
-      function requestError(e) {
-        const error = (`Request failed. ${e}`);
-        callback(error, null);
-      }
-  
-
-  }
-
-  /**
-   * Fetch reviews by restaurant IDs.
-   */
-  static fetchReviewByRestaurantId(id, callback) {
-    // fetch all restaurants with proper error handling.
-
-    console.log('>>>>fetchReviewByRestaurantId<<<<<<');
-    const query_params = '?restaurant_id=' + id;
-
-    return DBHelper.readDataById('reviews').then(function (reviews) {
-        if (reviews.length) {
-          return Promise.resolve(reviews);
-        } else {
-          console.log('fetch from fetchReviewByRestaurantId');
+          const query_params = id;
           return ReviewDBHelper.fetchReviewsFromAPI(query_params);
         }
       })
       .then(addReviews)
       .catch(e => requestError(e));
 
+    function addReviews(reviews) {
+      callback(null, reviews);
+    }
 
-      function addReviews(reviews) {
-        callback(null, reviews);
-      }
-
-      function requestError(e) {
-        const error = (`Request failed. ${e}`);
-        callback(error, null);
-      }
+    function requestError(e) {
+      const error = (`Request failed. ${e}`);
+      callback(error, null);
+    }
   }
 
+  /**
+   * Fetch reviews by restaurant IDs.
+   */
+  static fetchReviewByRestaurantId(id, callback) {
+
+    return DBHelper.readDataById('reviews').then(function (reviews) {
+        if (reviews.length) {
+          return Promise.resolve(reviews);
+        } else {
+          const query_params = '?restaurant_id=' + id;
+          return ReviewDBHelper.fetchReviewsFromAPI(query_params);
+        }
+      })
+      .then(addReviews)
+      .catch(e => requestError(e));
+
+    function addReviews(reviews) {
+      callback(null, reviews);
+    }
+
+    function requestError(e) {
+      const error = (`Request failed. ${e}`);
+      callback(error, null);
+    }
+  }
 }

@@ -16,7 +16,7 @@ const fillRestaurantHTML = (restaurant) => {
 }
 
 const createRestaurantViewHTML = (restaurant) => {
-    const responsiveImages = DBHelper.imageUrlsForRestaurant(restaurant);
+    const responsiveImages = RestaurantDBHelper.imageUrlsForRestaurant(restaurant);
     const restaurantHTML = `
     <h2 id="restaurant-name">${restaurant.name}</h2>
     <picture id="restaurant-img">

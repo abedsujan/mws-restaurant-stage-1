@@ -25,7 +25,7 @@ const fillCuisinesHTML = (cuisines) => {
  * Create restaurant HTML.
  */
 const createRestaurantHTML = (restaurant) => {
-  const responsiveImages = DBHelper.imageUrlsForRestaurant(restaurant);
+  const responsiveImages = RestaurantDBHelper.imageUrlsForRestaurant(restaurant);
   
   const li = document.createElement('li');
   li.insertAdjacentHTML('beforeend', `
@@ -37,7 +37,7 @@ const createRestaurantHTML = (restaurant) => {
     <h3>${restaurant.name}</h3>
     <p>${restaurant.neighborhood}</p>
     <p>${restaurant.address}</p>
-    <a href="${DBHelper.urlForRestaurant(restaurant)}">View Details</a>
+    <a href="${RestaurantDBHelper.urlForRestaurant(restaurant)}">View Details</a>
   `);
 
   return li;

@@ -22,7 +22,7 @@ window.initMap = () => {
           scrollwheel: false
         });
         fillBreadcrumb();
-        DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+        RestaurantDBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
       }
     });
   }
@@ -47,7 +47,7 @@ const updateRestaurants = () => {
   const cuisine = $("#cuisines-select option:selected").val();
   const neighborhood = $("#neighborhoods-select option:selected").val();
 
-  DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
+  RestaurantDBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
     if (error) { // Got an error!
       console.error(error);
     } else {
@@ -89,7 +89,7 @@ const fillRestaurantsHTML = (restaurants = self.restaurants) => {
 const addMarkersToMap = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     // Add marker to the map
-    const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.map);
+    const marker = RestaurantDBHelper.mapMarkerForRestaurant(restaurant, self.map);
     google.maps.event.addListener(marker, 'click', () => {
       window.location.href = marker.url
     });
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
  * Fetch all neighborhoods and set their HTML.
  */
 const fetchNeighborhoods = () => {
-  DBHelper.fetchNeighborhoods((error, neighborhoods) => {
+  RestaurantDBHelper.fetchNeighborhoods((error, neighborhoods) => {
     if (error) { // Got an error
       console.error(error);
     } else {
@@ -124,7 +124,7 @@ const fetchNeighborhoods = () => {
  * Fetch all cuisines and set their HTML.
  */
 const fetchCuisines = () => {
-  DBHelper.fetchCuisines((error, cuisines) => {
+  RestaurantDBHelper.fetchCuisines((error, cuisines) => {
     if (error) { // Got an error!
       console.error(error);
     } else {

@@ -73,6 +73,7 @@ function build_scripts() {
 		'./js/idb.js',
 		'./js/dbhelper.js',
 		'./js/init.js',
+		'./js/restaurant_db_helper.js',
 		'./js/review_db_helper.js',
 		'./js/header.js',
 		'./js/home_html_fragments.js',

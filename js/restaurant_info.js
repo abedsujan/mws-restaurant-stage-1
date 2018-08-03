@@ -11,11 +11,9 @@ const fetchRestaurantFromURL = (callback) => {
     error = 'No restaurant id in URL'
     callback(error, null);
   } else {
-    DBHelper.fetchRestaurantById(id, (error, restaurant) => {
+    RestaurantDBHelper.fetchRestaurantById(id, (error, restaurant) => {
       self.restaurant = restaurant;
-
-      console.log('fetchRestaurantFromURL :', restaurant);
-
+      
       if (!restaurant) {
         console.error(error);
         return;
@@ -27,9 +25,6 @@ const fetchRestaurantFromURL = (callback) => {
 
     ReviewDBHelper.fetchReviewByRestaurantId(id, (error, reviews) => {
       self.reviews = reviews;
-
-      console.log('fetchRestaurantFromURL :', reviews);
-
       if (!reviews) {
         console.error(error);
         return;
