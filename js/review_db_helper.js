@@ -19,15 +19,9 @@ class ReviewDBHelper {
   }
 
   static fetchReviewsFromAPI(query_params) {
-
-    return fetch(REVIEW_ENDPOINT + query_params, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(function (response) {
-        return response.json();
-      }).then(reviews => {
+    const fetch_url = REVIEW_ENDPOINT + query_params
+    return DBHelper.fetchFromAPI(fetch_url)
+      .then(reviews => {
         // DBHelper.saveReviewsToCacheDatabase(reviews);
         return reviews;
       });

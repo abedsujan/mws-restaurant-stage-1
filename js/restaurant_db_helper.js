@@ -4,16 +4,9 @@ class RestaurantDBHelper {
 
     const fetch_url = (query_params) ? RESTAURANT_ENDPOINT + query_params : RESTAURANT_ENDPOINT;
 
-    return fetch(fetch_url, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(function (response) {
-        return response.json();
-      }).then(restaurants => {
+    return DBHelper.fetchFromAPI(fetch_url)
+      .then(restaurants => {
         DBHelper.saveToDatabase(restaurants);
-
         return restaurants;
       });
   }
@@ -53,7 +46,6 @@ class RestaurantDBHelper {
         if (restaurant.length) {
           return Promise.resolve(restaurant);
         } else {
-          console.log('fetch from fetchRestaurantsFromAPI');
           return RestaurantDBHelper.fetchRestaurantsFromAPI(id);
         }
       })

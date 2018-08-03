@@ -10,6 +10,18 @@ class DBHelper {
     return `http://localhost:${port}`;
   }
 
+  static fetchFromAPI(fetch_url) {
+
+    return fetch(fetch_url, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(function (response) {
+        return response.json();
+      });
+  }
+
   static openDatabase() {
     // If the browser doesn't support service worker,
     // we don't care about having a database
@@ -67,5 +79,5 @@ class DBHelper {
     // TODO:
     return Promise.resolve([]);
   }
-  
+
 }
