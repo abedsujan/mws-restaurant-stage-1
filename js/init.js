@@ -6,5 +6,8 @@ window.onload = () => {
     }
 };
 
+const INDEXBD_RESTAURANT = 'RestaurantsDB';
+const INDEXBD_REVIEW = 'ReviewsDB';
+
 const RESTAURANT_ENDPOINT = DBHelper.DATABASE_URL + '/restaurants/';
 const REVIEW_ENDPOINT = DBHelper.DATABASE_URL + '/reviews/';

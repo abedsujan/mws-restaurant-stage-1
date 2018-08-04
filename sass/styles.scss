@@ -1,6 +1,26 @@
 @charset "utf-8";
 /* CSS Document */
 
+/* Color */
+
+$black: #000;
+$dark: #444; // dark gray
+$gray: #666;
+$white-light: #eee;
+$white: #fff;
+$dark-blue: #042840;
+$orange: #945306;
+/* font size */
+
+$font-small: 12px;
+$font-medium: 16px;
+$font-large: 20px;
+$font-xlarge: 24px;
+/** BreakPoint */
+
+$breakpoint-small: 500px;
+$breakpoint-medium: 800px;
+$breakpoint-large: 1000px;
 /* Normalize Stylesheet */
 
 html,
@@ -214,7 +234,7 @@ nav {
     text-align: left;
     width: 100%;
     a {
-      background-color:#042840;
+      background-color: #042840;
       border-bottom: 3px solid #eee;
       color: #fff;
       display: inline-block;
@@ -227,7 +247,7 @@ nav {
       width: 100%;
     }
     h3 {
-      color: #945306;
+      color: $orange;
       font-family: Arial, sans-serif;
       font-size: 1.2em;
       font-weight: 200;
@@ -270,7 +290,7 @@ nav {
 }
 
 #restaurant-name {
-  color: #945306;
+  color: $orange;
   font-family: Arial, sans-serif;
   font-size: 1.2em;
   font-weight: 200;
@@ -305,7 +325,8 @@ nav {
 
 .inside #map-container,
 #restaurant-container,
-#reviews-container {
+#reviews-container,
+#form-container {
   width: 100%;
   padding: 0;
   margin: 10px;
@@ -315,13 +336,13 @@ nav {
   order: -1;
 }
 
-#reviews-container {
+#reviews-container,
+#form-container {
   order: 2;
-  border-bottom: 1px solid #d9d9d9;
   border-top: 1px solid #fff;
   width: 100%;
   h3.review-head {
-    color: #945306;
+    color: $orange;
     font-weight: 300;
     font-size: 1.4em;
     padding: 14px 0 0;
@@ -356,7 +377,7 @@ nav {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  background: #042840;
+  background: $dark-blue;
   color: #fff;
   .reviewer {
     width: calc(100% - 120px);
@@ -369,7 +390,7 @@ nav {
     }
   }
   .review-rating {
-    background: #945306;
+    background: $orange;
     border-radius: 5px;
     width: 80px;
     text-align: center;
@@ -379,6 +400,148 @@ nav {
 
 .review-comment {
   line-height: 1.4;
+}
+
+/* ====================== New Review ====================== */
+
+#form-container {
+  order: 3;
+}
+
+#review-form {
+  padding: 10px;
+  margin: 10px;
+}
+
+#review-name {
+  padding: 15px 10px;
+  width: 50%;
+}
+
+#review-comment {
+  width: 100%;
+  max-width: 100%;
+  padding: 5px 10px;
+  margin: 15px 0;
+  box-sizing: border-box;
+}
+
+#review-rating #review-rating * {
+  margin: 0;
+  padding: 0;
+}
+
+#review-rating {
+  label::before {
+    display: inline-block;
+  }
+  label:hover,
+  label:hover~label {
+    color: $white-light
+  }
+  label {
+    color: $gray;
+  }
+  input:checked~label {
+    color: $dark-blue;
+  }
+  input[type=submit] {
+    color: $white;
+    padding: 5px 10px;
+    background-color: $dark-blue;
+    border: none;
+    cursor: pointer;
+  }
+  input[type=submit]:hover,
+  input[type=submit]:focus {
+    background-color: $white-light;
+    transition: 500ms;
+    color: $black;
+  }
+}
+
+.btn {
+  background-color: $dark-blue;
+  border: 1px solid $orange;
+  display: inline-block;
+  cursor: pointer;
+  color: #FFFFFF;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-size: 14px;
+  padding: 8px 18px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+input[type="button"]:hover,
+input[type="submit"]:hover {
+  background-color: #945306;
+}
+
+/* ===================== Ratings =====================*/
+
+$unchecked-star: '\2606';
+$unchecked-color: #888;
+$checked-star: '\2605';
+$checked-color: #e52;
+.star-cb-group {
+  /* remove inline-block whitespace */
+  font-size: 0;
+  * {
+    font-size: 1rem;
+  }
+  /* flip the order so we can use the + and ~ combinators */
+  unicode-bidi: bidi-override;
+  direction: rtl;
+  &>input {
+    display: none;
+    &+label {
+      /* only enough room for the star */
+      display: inline-block;
+      overflow: hidden;
+      text-indent: 9999px;
+      width: 1em;
+      white-space: nowrap;
+      cursor: pointer;
+      &:before {
+        display: inline-block;
+        text-indent: -9999px;
+        content: $unchecked-star;
+        color: $unchecked-color;
+      }
+    }
+    &:checked~label:before,
+    &+label:hover~label:before,
+    &+label:hover:before {
+      content: $checked-star;
+      color: #e52;
+      text-shadow: 0 0 1px #333;
+    }
+  }
+  /* the hidden clearer */
+  &>.star-cb-clear+label {
+    text-indent: -9999px;
+    width: .5em;
+    margin-left: -.5em;
+  }
+  &>.star-cb-clear+label:before {
+    width: .5em;
+  }
+  &:hover>input+label:before {
+    content: $unchecked-star;
+    color: $unchecked-color;
+    text-shadow: none;
+  }
+  &:hover>input+label:hover~label:before,
+  &:hover>input+label:hover:before {
+    content: $checked-star;
+    color: $checked-color;
+    text-shadow: 0 0 1px #333;
+  }
+}
+
+fieldset {
+  border: 0;
 }
 
 /* ====================== Responsiveness ====================== */

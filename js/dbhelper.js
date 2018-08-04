@@ -33,6 +33,10 @@ class DBHelper {
         keyPath: 'id'
       });
       store.createIndex('by-name', 'name');
+
+      upgradeDb.createObjectStore('reviews', {
+        keyPath: 'id'
+      });
     });
   }
 
@@ -56,14 +60,15 @@ class DBHelper {
   }
 
   static getCachedRestaurants() {
-    return DBHelper.openDatabase().then(function (db) {
-      if (!db) {
-        return;
-      }
+    return DBHelper.openDatabase()
+      .then(function (db) {
+        if (!db) {
+          return;
+        }
 
-      var store = db.transaction('restaurants').objectStore('restaurants');
-      return store.getAll();
-    });
+        var store = db.transaction('restaurants').objectStore('restaurants');
+        return store.getAll();
+      });
   }
 
   static readAllData(storeName) {
@@ -78,6 +83,38 @@ class DBHelper {
   static readDataById(storeName) {
     // TODO:
     return Promise.resolve([]);
+  }
+
+
+  // Review IndexDB
+
+  static getCachedReviewsbyRestaurantID() {
+    return DBHelper.openDatabase()
+      .then(function (db) {
+        if (!db) {
+          return;
+        }
+
+        var store = db.transaction('reviews').objectStore('reviews');
+        return store.getAll();
+      });
+  }
+  // End Review IndexDB
+
+  static createNewReview(newReviewJSON, resolve) {
+    fetch(REVIEW_ENDPOINT, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        method: 'post',
+        body: JSON.stringify(newReviewJSON)
+      })
+      .then(response => response.json())
+      .then(function (review) {
+        console.log('Successfully added the new review', review);
+        resolve(review);
+      });
   }
 
 }

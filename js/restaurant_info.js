@@ -13,7 +13,7 @@ const fetchRestaurantFromURL = (callback) => {
   } else {
     RestaurantDBHelper.fetchRestaurantById(id, (error, restaurant) => {
       self.restaurant = restaurant;
-      
+
       if (!restaurant) {
         console.error(error);
         return;
@@ -57,3 +57,44 @@ const getParameterByName = (name) => {
 
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 };
+
+
+/**
+ * Create new restaurant review
+ */
+document.getElementById('review-form').addEventListener('submit', function (event) {
+  event.preventDefault();
+
+  const name = document.getElementById('review-form').elements['review-name'].value;
+  const rating = document.getElementById('review-form').elements['review-rating'].value;
+  const comment = document.getElementById('review-form').elements['review-comment'].value;
+  const url = new URL(window.location.href);
+  const restaurant = url.searchParams.get('id');
+
+  const JSONtext = `{
+    "restaurant_id": ${restaurant},
+    "name": "${name}",
+    "rating": ${rating},
+    "comments": "${comment}"
+  }`;
+
+  if (navigator.onLine) {
+    // Online update
+    var createNewReviewPromise = new Promise(resolve => DBHelper.createNewReview(JSON.parse(JSONtext), resolve));
+    createNewReviewPromise.then((JsonNewReview) => {
+
+      // Update review HTML
+      const ul = document.getElementById('reviews-list');
+      ul.insertAdjacentHTML('beforeend', createReviewHTML(JsonNewReview));
+      alert('Your review added successfully! Thank you.');
+    });
+  } else {
+    // TODO: offline update
+
+  }
+
+  // reset form
+  document.getElementById('review-form').elements['review-name'].value = '';
+  document.getElementById('review-form').elements['review-comment'].value = '';
+
+}, true);
