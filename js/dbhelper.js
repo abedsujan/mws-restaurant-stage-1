@@ -28,36 +28,62 @@ class DBHelper {
     if (!navigator.serviceWorker) {
       return Promise.resolve();
     }
-    return idb.open('RestaurantsDB', 1, function (upgradeDb) {
-      var store = upgradeDb.createObjectStore('restaurants', {
+    return idb.open('RestaurantsDB', 2, function (upgradeDb) {
+      var resStore = upgradeDb.createObjectStore('restaurants', {
         keyPath: 'id'
       });
-      store.createIndex('by-name', 'name');
+      resStore.createIndex('by-name', 'name');
 
-      upgradeDb.createObjectStore('reviews', {
+      var revStore = upgradeDb.createObjectStore('reviews', {
         keyPath: 'id'
       });
+      revStore.createIndex('restaurant-id', 'restaurant_id');
+
+
     });
   }
 
-  static saveToDatabase(data) {
+  static saveRestaurantsToIndexedDB(restaurants) {
     return DBHelper.openDatabase().then(function (db) {
       if (!db) return;
 
       var tx = db.transaction('restaurants', 'readwrite');
       var store = tx.objectStore('restaurants');
 
-      if (Array.isArray(data)) {
-        data.forEach(function (restaurant) {
+      if (Array.isArray(restaurants)) {
+        restaurants.forEach(function (restaurant) {
           store.put(restaurant);
         });
       } else {
-        store.put(data);
+        store.put(restaurants);
       }
 
       return tx.complete;
     });
   }
+
+
+  static saveReivewsToIndexedDB(reviews) {
+    return DBHelper.openDatabase().then(function (db) {
+      if (!db) return;
+
+      var tx = db.transaction(IDB_STORE_REVIEWS, 'readwrite');
+      var store = tx.objectStore(IDB_STORE_REVIEWS);
+
+      if (Array.isArray(reviews)) {
+        reviews.forEach(function (review) {
+          store.put(review);
+        });
+      } else {
+        store.put(reviews);
+      }
+
+      console.log('Saved reviews to indexed db:', reviews);
+
+      return tx.complete;
+    });
+  }
+
 
   static getCachedRestaurants() {
     return DBHelper.openDatabase()
@@ -88,7 +114,7 @@ class DBHelper {
 
   // Review IndexDB
 
-  static getCachedReviewsbyRestaurantID() {
+  static getCachedReviewsbyRestaurantID(id) {
     return DBHelper.openDatabase()
       .then(function (db) {
         if (!db) {
@@ -96,6 +122,8 @@ class DBHelper {
         }
 
         var store = db.transaction('reviews').objectStore('reviews');
+
+        // TODO: use get() with ID ot search specific
         return store.getAll();
       });
   }

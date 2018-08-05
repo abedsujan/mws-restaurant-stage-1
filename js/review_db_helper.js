@@ -22,7 +22,7 @@ class ReviewDBHelper {
     const fetch_url = REVIEW_ENDPOINT + query_params
     return DBHelper.fetchFromAPI(fetch_url)
       .then(reviews => {
-        // DBHelper.saveReviewsToCacheDatabase(reviews);
+        DBHelper.saveReivewsToIndexedDB(reviews);
         return reviews;
       });
   }
@@ -82,17 +82,34 @@ class ReviewDBHelper {
    * Fetch reviews by restaurant IDs.
    */
   static fetchReviewByRestaurantId(id, callback) {
+    const restaurant_id = id;
+    return DBHelper.getCachedReviewsbyRestaurantID(id).then(function (reviews) {
 
-    return DBHelper.readDataById('reviews').then(function (reviews) {
-        if (reviews.length) {
-          return Promise.resolve(reviews);
+
+
+        if (reviews && reviews.length) {
+
+          const filteredReviews = reviews.filter(findByRestaurantID);
+          console.log('ALLL reviews', reviews);
+          if (filteredReviews.length > 0) {
+            console.log('filtered reviews', filteredReviews);
+            return Promise.resolve(reviews);
+
+          } else {
+            return ReviewDBHelper.fetchReviewsFromAPI(query_params);
+          }
         } else {
-          const query_params = '?restaurant_id=' + id;
+          // fetching from API
+          console.log('reviews fetching from API');
           return ReviewDBHelper.fetchReviewsFromAPI(query_params);
         }
       })
       .then(addReviews)
       .catch(e => requestError(e));
+
+    function findByRestaurantID(review) {
+      return review.restaurant_id == restaurant_id;
+    }
 
     function addReviews(reviews) {
       callback(null, reviews);

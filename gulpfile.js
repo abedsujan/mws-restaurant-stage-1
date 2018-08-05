@@ -71,6 +71,7 @@ function build_scripts() {
 
 	const js_files = [
 		'./js/idb.js',
+		'./js/idb_helper.js',
 		'./js/dbhelper.js',
 		'./js/init.js',
 		'./js/restaurant_db_helper.js',

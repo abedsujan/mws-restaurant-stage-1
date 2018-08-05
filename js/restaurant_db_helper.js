@@ -6,7 +6,7 @@ class RestaurantDBHelper {
 
     return DBHelper.fetchFromAPI(fetch_url)
       .then(restaurants => {
-        DBHelper.saveToDatabase(restaurants);
+        DBHelper.saveRestaurantsToIndexedDB(restaurants);
         return restaurants;
       });
   }
