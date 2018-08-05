@@ -83,6 +83,7 @@ class ReviewDBHelper {
    */
   static fetchReviewByRestaurantId(id, callback) {
     const restaurant_id = id;
+    const query_params = '?restaurant_id=' + id;
     return DBHelper.getCachedReviewsbyRestaurantID(id).then(function (reviews) {
 
 
@@ -93,8 +94,7 @@ class ReviewDBHelper {
           console.log('ALLL reviews', reviews);
           if (filteredReviews.length > 0) {
             console.log('filtered reviews', filteredReviews);
-            return Promise.resolve(reviews);
-
+            return Promise.resolve(filteredReviews);
           } else {
             return ReviewDBHelper.fetchReviewsFromAPI(query_params);
           }

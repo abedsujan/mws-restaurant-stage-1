@@ -59,11 +59,20 @@ const getParameterByName = (name) => {
 };
 
 
+
+const reviewSubmitListener = () => {
+
+  document.getElementById('review-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    createNewReview();
+
+  }, true);
+}
 /**
  * Create new restaurant review
  */
-document.getElementById('review-form').addEventListener('submit', function (event) {
-  event.preventDefault();
+const createNewReview = () => {
 
   const name = document.getElementById('review-form').elements['review-name'].value;
   const rating = document.getElementById('review-form').elements['review-rating'].value;
@@ -82,6 +91,8 @@ document.getElementById('review-form').addEventListener('submit', function (even
     // Online update
     var createNewReviewPromise = new Promise(resolve => DBHelper.createNewReview(JSON.parse(JSONtext), resolve));
     createNewReviewPromise.then((JsonNewReview) => {
+      // Store reivew to indexedDB
+      DBHelper.saveReivewsToIndexedDB(JsonNewReview);
 
       // Update review HTML
       const ul = document.getElementById('reviews-list');
@@ -96,5 +107,30 @@ document.getElementById('review-form').addEventListener('submit', function (even
   // reset form
   document.getElementById('review-form').elements['review-name'].value = '';
   document.getElementById('review-form').elements['review-comment'].value = '';
+}
 
-}, true);
+
+
+// CONNECTIVITY ACTIONS
+
+/**
+ * Trigger connectivity status
+ */
+function addConnectivityListeners() {
+  window.addEventListener('online', updateOnlineStatus);
+  window.addEventListener('offline', updateOnlineStatus);
+}
+
+
+/**
+ * visual indicator of Offline status
+ * and trigger synchronisation of offline data
+ */
+function updateOnlineStatus() {
+  let status = document.getElementById("onlineStatus");
+  const condition = navigator.onLine ? "online" : "offline";
+  status.className = condition;
+  status.innerHTML = condition.toUpperCase();
+
+  DBHelper.syncOfflineUpdates();
+}
