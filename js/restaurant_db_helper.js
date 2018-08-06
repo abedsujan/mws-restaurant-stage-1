@@ -41,16 +41,38 @@ class RestaurantDBHelper {
    * Fetch a restaurant by its ID.
    */
   static fetchRestaurantById(id, callback) {
+    const restaurant_id = id;
+    return DBHelper.readAllData('restaurants').then(function (restaurants) {
 
-    return DBHelper.readDataById('restaurants').then(function (restaurant) {
-        if (restaurant.length) {
-          return Promise.resolve(restaurant);
+        if (restaurants && restaurants.length) {
+
+          const filteredRestaurants = restaurants.filter(findByRestaurantID);
+          console.log('ALLL restaurants', restaurants);
+          if (filteredRestaurants.length > 0) {
+            console.log('filtered restaurants', filteredRestaurants);
+            return Promise.resolve(filteredRestaurants[0]);
+          } else {
+            return RestaurantDBHelper.fetchRestaurantsFromAPI(restaurant_id);
+          }
         } else {
-          return RestaurantDBHelper.fetchRestaurantsFromAPI(id);
+          // fetching from API
+          console.log('restaurants fetching from API');
+          return RestaurantDBHelper.fetchRestaurantsFromAPI(restaurant_id);
         }
+
+        // if (restaurant.length) {
+        //   return Promise.resolve(restaurant);
+        // } else {
+        //   return RestaurantDBHelper.fetchRestaurantsFromAPI(id);
+        // }
+
       })
       .then(addRestaurants)
       .catch(e => requestError(e));
+
+    function findByRestaurantID(restaurant) {
+      return restaurant.id == restaurant_id;
+    }
 
     function addRestaurants(restaurants) {
       callback(null, restaurants);

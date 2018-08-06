@@ -130,7 +130,10 @@ class DBHelper {
   // End Review IndexDB
 
   static createNewReview(newReviewJSON, resolve) {
-    fetch(REVIEW_ENDPOINT, {
+
+    if (navigator.onLine) {
+
+      fetch(REVIEW_ENDPOINT, {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
@@ -143,6 +146,26 @@ class DBHelper {
         console.log('Successfully added the new review', review);
         resolve(review);
       });
+      
+      // Online update
+      var createNewReviewPromise = new Promise(resolve => DBHelper.createNewReview(JSON.parse(JSONtext), resolve));
+      createNewReviewPromise.then((JsonNewReview) => {
+        // Store reivew to indexedDB
+        DBHelper.saveReivewsToIndexedDB(JsonNewReview);
+  
+        // Update review HTML
+        const ul = document.getElementById('reviews-list');
+        ul.insertAdjacentHTML('beforeend', createReviewHTML(JsonNewReview));
+        alert('Your review added successfully! Thank you.');
+      });
+    } else {
+     
+      window.addEventListener('online', () => this.createNewReview(newReviewJSON, resolve));
+      alert('Review will automatically saved, when API back internet connection back to online');
+  
+    }
+
+    
   }
 
 }

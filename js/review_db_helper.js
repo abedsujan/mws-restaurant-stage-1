@@ -86,11 +86,9 @@ class ReviewDBHelper {
     const query_params = '?restaurant_id=' + id;
     return DBHelper.getCachedReviewsbyRestaurantID(id).then(function (reviews) {
 
-
-
         if (reviews && reviews.length) {
 
-          const filteredReviews = reviews.filter(findByRestaurantID);
+          const filteredReviews = reviews.filter(findReviewsByRestaurantID);
           console.log('ALLL reviews', reviews);
           if (filteredReviews.length > 0) {
             console.log('filtered reviews', filteredReviews);
@@ -107,7 +105,7 @@ class ReviewDBHelper {
       .then(addReviews)
       .catch(e => requestError(e));
 
-    function findByRestaurantID(review) {
+    function findReviewsByRestaurantID(review) {
       return review.restaurant_id == restaurant_id;
     }
 

@@ -87,28 +87,32 @@ const createNewReview = () => {
     "comments": "${comment}"
   }`;
 
-  if (navigator.onLine) {
-    // Online update
-    var createNewReviewPromise = new Promise(resolve => DBHelper.createNewReview(JSON.parse(JSONtext), resolve));
-    createNewReviewPromise.then((JsonNewReview) => {
-      // Store reivew to indexedDB
-      DBHelper.saveReivewsToIndexedDB(JsonNewReview);
+  var createNewReviewPromise = new Promise(resolve => DBHelper.createNewReview(JSON.parse(JSONtext), resolve));
+  createNewReviewPromise.then((JsonNewReview) => {
+    // Store reivew to indexedDB
+    DBHelper.saveReivewsToIndexedDB(JsonNewReview);
 
-      // Update review HTML
-      const ul = document.getElementById('reviews-list');
-      ul.insertAdjacentHTML('beforeend', createReviewHTML(JsonNewReview));
-      alert('Your review added successfully! Thank you.');
-    });
-  } else {
-    // TODO: offline update
+    // Update review HTML
+    const ul = document.getElementById('reviews-list');
+    ul.insertAdjacentHTML('beforeend', createReviewHTML(JsonNewReview));
+    alert('Your review added successfully! Thank you.');
+    // reset form
+    document.getElementById('review-form').elements['review-name'].value = '';
+    document.getElementById('review-form').elements['review-comment'].value = '';
 
-  }
+    // if (navigator.onLine) {
+    //   // Online update
 
-  // reset form
-  document.getElementById('review-form').elements['review-name'].value = '';
-  document.getElementById('review-form').elements['review-comment'].value = '';
+    //   
+    // } else {
+
+    //   window.addEventListener('online', () => this.createNewReview(params, callback));
+    //   alert('Your review has been saved! We will post it when you are connected to the internet');
+
+    // }
+
+  });
 }
-
 
 
 // CONNECTIVITY ACTIONS
@@ -127,10 +131,10 @@ function addConnectivityListeners() {
  * and trigger synchronisation of offline data
  */
 function updateOnlineStatus() {
-  let status = document.getElementById("onlineStatus");
-  const condition = navigator.onLine ? "online" : "offline";
-  status.className = condition;
-  status.innerHTML = condition.toUpperCase();
+  // let status = document.getElementById("onlineStatus");
+  // const condition = navigator.onLine ? "online" : "offline";
+  // status.className = condition;
+  // status.innerHTML = condition.toUpperCase();
 
-  DBHelper.syncOfflineUpdates();
+  // DBHelper.syncOfflineUpdates();
 }
