@@ -1,8 +1,4 @@
 
-const IDB_DB_NAME = 'RestaurantsDB';
-const IDB_STORE_RESTAURANTS = 'restaurants';
-const IDB_STORE_REVIEWS = 'reviews';
-const IDB_VERSION = 1;
 
 /**
  * Common idb helper functions.

@@ -1,3 +1,11 @@
+const INDEXDB_NAME = 'RestaurantsDB';
+const OBJECT_STORE_RESTAURANT = 'restaurants';
+const OBJECT_STORE_REVIEW = 'reviews';
+const IDB_VERSION = 3;
+
+const RESTAURANT_ENDPOINT = DBHelper.DATABASE_URL + '/restaurants/';
+const REVIEW_ENDPOINT = DBHelper.DATABASE_URL + '/reviews/';
+
 // Register service worker
 window.onload = () => {
     if ('serviceWorker' in navigator) {
@@ -5,12 +13,6 @@ window.onload = () => {
             .then(() => console.log('service worker registered!'));
     }
 };
-
-const INDEXBD_RESTAURANT = 'RestaurantsDB';
-const INDEXBD_REVIEW = 'ReviewsDB';
-
-const RESTAURANT_ENDPOINT = DBHelper.DATABASE_URL + '/restaurants/';
-const REVIEW_ENDPOINT = DBHelper.DATABASE_URL + '/reviews/';
 
 
 const fillMap = () => {

@@ -23,32 +23,32 @@ class DBHelper {
   }
 
   static openDatabase() {
-    // If the browser doesn't support service worker,
-    // we don't care about having a database
+    // If the browser doesn't support service worker
     if (!navigator.serviceWorker) {
       return Promise.resolve();
     }
-    return idb.open('RestaurantsDB', 2, function (upgradeDb) {
-      var resStore = upgradeDb.createObjectStore('restaurants', {
+    return idb.open(INDEXDB_NAME, IDB_VERSION, function (upgradeDb) {
+      var resStore = upgradeDb.createObjectStore(OBJECT_STORE_RESTAURANT, {
         keyPath: 'id'
       });
       resStore.createIndex('by-name', 'name');
 
-      var revStore = upgradeDb.createObjectStore('reviews', {
+      var revStore = upgradeDb.createObjectStore(OBJECT_STORE_REVIEW, {
         keyPath: 'id'
       });
       revStore.createIndex('restaurant-id', 'restaurant_id');
-
-
     });
   }
 
   static saveRestaurantsToIndexedDB(restaurants) {
-    return DBHelper.openDatabase().then(function (db) {
-      if (!db) return;
 
-      var tx = db.transaction('restaurants', 'readwrite');
-      var store = tx.objectStore('restaurants');
+    return DBHelper.openDatabase().then(function (db) {
+      if (!db) {
+        return
+      };
+
+      var tx = db.transaction(OBJECT_STORE_RESTAURANT, 'readwrite');
+      var store = tx.objectStore(OBJECT_STORE_RESTAURANT);
 
       if (Array.isArray(restaurants)) {
         restaurants.forEach(function (restaurant) {
@@ -102,7 +102,7 @@ class DBHelper {
           return;
         }
 
-        var store = db.transaction('reviews').objectStore('reviews');
+        var store = db.transaction(OBJECT_STORE_REVIEW).objectStore(OBJECT_STORE_REVIEW);
 
         // TODO: use get() with ID ot search specific
         return store.getAll();
@@ -115,37 +115,37 @@ class DBHelper {
     if (navigator.onLine) {
 
       fetch(REVIEW_ENDPOINT, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        method: 'post',
-        body: JSON.stringify(newReviewJSON)
-      })
-      .then(response => response.json())
-      .then(function (review) {
-        console.log('Successfully added the new review', review);
-        resolve(review);
-      });
-      
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          method: 'post',
+          body: JSON.stringify(newReviewJSON)
+        })
+        .then(response => response.json())
+        .then(function (review) {
+          console.log('Successfully added the new review', review);
+          resolve(review);
+        });
+
       // Online update
       var createNewReviewPromise = new Promise(resolve => DBHelper.createNewReview(JSON.parse(JSONtext), resolve));
       createNewReviewPromise.then((JsonNewReview) => {
         // Store reivew to indexedDB
         DBHelper.saveReivewsToIndexedDB(JsonNewReview);
-  
+
         // Update review HTML
         const ul = document.getElementById('reviews-list');
         ul.insertAdjacentHTML('beforeend', createReviewHTML(JsonNewReview));
         alert('Your review added successfully! Thank you.');
       });
     } else {
-     
+
       window.addEventListener('online', () => this.createNewReview(newReviewJSON, resolve));
       alert('Review will automatically saved, when API back internet connection back to online');
-  
+
     }
-    
+
   }
 
 }

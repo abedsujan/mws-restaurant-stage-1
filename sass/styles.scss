@@ -13,8 +13,8 @@ $orange: #945306;
 
 
 /* font */
-$font-family-Roboto: 'Roboto, sans-serif';
-$font-family-Arial:'Arial, Helvetica, sans-serif';
+$font-family-Roboto: 'Roboto', sans-serif;
+$font-family-Arial: Arial, Helvetica, sans-serif;
 
 
 $font-small: 12px;
@@ -41,7 +41,7 @@ footer {
 html,
 body {
   -webkit-font-smoothing: antialiased;
-  font-family: Roboto, sans-serif;
+  font-family: $font-family-Roboto;
 }
 
 body,
