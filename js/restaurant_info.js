@@ -100,17 +100,6 @@ const createNewReview = () => {
     document.getElementById('review-form').elements['review-name'].value = '';
     document.getElementById('review-form').elements['review-comment'].value = '';
 
-    // if (navigator.onLine) {
-    //   // Online update
-
-    //   
-    // } else {
-
-    //   window.addEventListener('online', () => this.createNewReview(params, callback));
-    //   alert('Your review has been saved! We will post it when you are connected to the internet');
-
-    // }
-
   });
 }
 

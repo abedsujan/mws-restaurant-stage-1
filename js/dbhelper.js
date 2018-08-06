@@ -84,19 +84,6 @@ class DBHelper {
     });
   }
 
-
-  static getCachedRestaurants() {
-    return DBHelper.openDatabase()
-      .then(function (db) {
-        if (!db) {
-          return;
-        }
-
-        var store = db.transaction('restaurants').objectStore('restaurants');
-        return store.getAll();
-      });
-  }
-
   static readAllData(storeName) {
     return DBHelper.openDatabase()
       .then(function (db) {
@@ -105,12 +92,6 @@ class DBHelper {
         return store.getAll();
       })
   }
-
-  static readDataById(storeName) {
-    // TODO:
-    return Promise.resolve([]);
-  }
-
 
   // Review IndexDB
 
@@ -164,7 +145,6 @@ class DBHelper {
       alert('Review will automatically saved, when API back internet connection back to online');
   
     }
-
     
   }
 

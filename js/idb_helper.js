@@ -34,25 +34,5 @@ class IDBHelper {
       console.log('Success: successfully deleted!'+ IDB_DB_NAME);
     };
   }
-
-
-  // static openDatabase() {
-
-  //   if (!navigator.serviceWorker) {
-  //     return Promise.resolve();
-  //   }
-  //   return idb.open(IDB_DB_NAME, IDB_VERSION, function (upgradeDb) {
-  //     var store = upgradeDb.createObjectStore(IDB_STORE_RESTAURANTS, {
-  //       keyPath: 'id'
-  //     });
-
-  //     store.createIndex('by-name', 'name');
-
-  //     upgradeDb.createObjectStore('reviews', {
-  //       keyPath: 'id'
-  //     });
-  //   });
-  // }
-
   
 }

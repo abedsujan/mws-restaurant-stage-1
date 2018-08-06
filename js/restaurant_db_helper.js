@@ -60,12 +60,6 @@ class RestaurantDBHelper {
           return RestaurantDBHelper.fetchRestaurantsFromAPI(restaurant_id);
         }
 
-        // if (restaurant.length) {
-        //   return Promise.resolve(restaurant);
-        // } else {
-        //   return RestaurantDBHelper.fetchRestaurantsFromAPI(id);
-        // }
-
       })
       .then(addRestaurants)
       .catch(e => requestError(e));
