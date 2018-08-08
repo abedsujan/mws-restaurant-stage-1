@@ -26,6 +26,9 @@ const fillCuisinesHTML = (cuisines) => {
  */
 const createRestaurantHTML = (restaurant) => {
   const responsiveImages = RestaurantDBHelper.imageUrlsForRestaurant(restaurant);
+
+  const  is_favorite = (restaurant.is_favorite == 'true');
+
   const onclick_toggleFavorite = `toggleFavorite(${restaurant})`;
   const li = document.createElement('li');
   li.insertAdjacentHTML('beforeend', `
@@ -35,7 +38,7 @@ const createRestaurantHTML = (restaurant) => {
       <img class="restaurant-img" src="${responsiveImages.small}" srcset="${responsiveImages.small}" alt="Image of ${restaurant.name} Restaurant">
     </picture>
    <div class="favorite-star">
-    ${(restaurant.is_favorite)? 
+    ${(is_favorite)? 
       `<span onclick="toggleFavorite('${restaurant.id}', '${restaurant.is_favorite}')" class="favorite" aria-label="Toggle click on start icon to remove the restaurant ${restaurant.name}" from your favorite list of restarurants> ★ </span>`
       :
       `<span onclick="toggleFavorite('${restaurant.id}', '${restaurant.is_favorite}')" aria-label="Click on start icon to make the ${restaurant.name} as your favorite restarurant"> ☆ </span>`}

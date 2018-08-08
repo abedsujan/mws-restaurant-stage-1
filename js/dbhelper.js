@@ -56,12 +56,12 @@ class DBHelper {
         });
       } else {
         store.put(restaurants);
+        console.log('stored res data');
       }
 
       return tx.complete;
     });
   }
-
 
   static saveReivewsToIndexedDB(reviews) {
     return DBHelper.openDatabase().then(function (db) {
@@ -110,26 +110,63 @@ class DBHelper {
   }
 
 
+
+  static getCachedRestaurantID(id) {
+  const r_id =2;
+    return DBHelper.openDatabase()
+      .then(function (db) {
+        var store = db.transaction(OBJECT_STORE_REVIEW).objectStore(OBJECT_STORE_REVIEW);
+        return store.get(r_id);
+      }).then(function(res){
+        return res;
+      });
+  }
+
+
   // End Review IndexedDB
-  /**
-   * Update favorite IDB
-   */
-  static idbToggleFavorite(id, value) {
+
+  // Update restaurant's favorite property in IDB
+
+  static idbToggleFavorite(id, value, callback) {
+
+
     return DBHelper.openDatabase().then(function (db) {
       if (!db) return;
 
-      var tx = db.transaction(OBJECT_STORE_RESTAURANT, 'readwrite');
-      var store = tx.objectStore(OBJECT_STORE_RESTAURANT);
+      console.log('id', id);
+      console.log('is_favorite', value);
 
-      let val = store.get(id) || 0;
-      val.is_favorite = String(value);
-      store.put(val, id);
-      console.log('updated restaurant');
 
-      return tx.complete;
+      var objectStore = db.transaction([OBJECT_STORE_RESTAURANT], "readwrite").objectStore(OBJECT_STORE_RESTAURANT);
+      var request = objectStore.get(id);
+      console.log('request', request);
+      request.onerror = function (event) {
+        console.log('error fetching restaurnt from database');
+        // Handle errors!
+      };
+      request.onsuccess = function (event) {
+        // Get the old value that we want to update
+        var data = event.target.result;
+
+        // update the value(s) in the object that you want to change
+        data.is_favorite = value;
+
+        // Put this updated object back into the database.
+        var requestUpdate = objectStore.put(data);
+        requestUpdate.onerror = function (event) {
+          console.log('error updating data', event);
+          // Do something with the error
+        };
+        requestUpdate.onsuccess = function (event) {
+          console.log('successfully updated favorite data');
+          // Success - the data is updated!
+        };
+      };
+
+      return callback(null, objectStore.complete);
     });
   }
-
+  // End Review IndexedDB
 
   static updateRestaurantFavoriteStatus(id, is_favorite, callback) {
 
@@ -141,10 +178,8 @@ class DBHelper {
         method: 'put'
       }).then(res => res.json())
       .then(res => {
-        DBHelper.idbToggleFavorite(id, is_favorite)
-        callback(null, res)
+        return callback(null, res);
       });
-
   }
 
   static createNewReview(newReviewJSON, resolve) {

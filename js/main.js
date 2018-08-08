@@ -99,26 +99,23 @@ const fetchCuisines = () => {
  * Fetch all cuisines and set their HTML.
  */
 const toggleFavorite = (restaurant_id, is_favorite) => {
+  is_favorite = (is_favorite == 'true') ? 'false' : 'true';
 
-  // const state = (is_favorite) ? false : true;
-
-  DBHelper.updateRestaurantFavoriteStatus(restaurant_id, !!is_favorite, function (err, res) {
+  DBHelper.updateRestaurantFavoriteStatus(restaurant_id, is_favorite, function (err, res) {
     if (err) throw err;
-    console.log(res);
+    console.log('res', res);
     alert('triggered click event !!');
+
+    RestaurantDBHelper.fetchRestaurantById(restaurant_id, (error, res) => {
+      updateIndexedDB(res);
+    });
+
+    function updateIndexedDB(res) {
+      res.is_favorite = is_favorite;
+      DBHelper.saveRestaurantsToIndexedDB(res);
+    }
+
     window.location.reload(false);
   });
+
 }
-
-
-/**
- * mark as favorite.
- */
-// let toggleFavorite = (flag) => {
-//   DBHelper.toggleFavorite(restaurant.id, flag, function (err, res) {
-//     if (err) throw err;
-//     console.log(res);
-//     window.location.reload(false);
-//     //fillRestaurantHTML(res);
-//   });
-// };

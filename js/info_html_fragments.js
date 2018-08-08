@@ -94,9 +94,11 @@ const createReviewHTML = (review) => {
 const fillFavoriteHTML = (restaurant) => {
     const favoriteDiv = document.getElementById('favorite-star');
 
+    const  is_favorite = (restaurant.is_favorite == 'true');
+
     const favoriteDivInnerHTML = `
     
-    ${(restaurant.is_favorite)? 
+    ${(is_favorite)? 
       `<span onclick="toggleFavorite('${restaurant.id}', '${restaurant.is_favorite}')" class="favorite" aria-label="Toggle click on start icon to remove the restaurant ${restaurant.name}" from your favorite list of restarurants> ★ </span>`
       :
       `<span onclick="toggleFavorite('${restaurant.id}', '${restaurant.is_favorite}')" aria-label="Click on start icon to make the ${restaurant.name} as your favorite restarurant"> ☆ </span>`}
