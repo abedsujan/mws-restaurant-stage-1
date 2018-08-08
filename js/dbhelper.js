@@ -67,8 +67,8 @@ class DBHelper {
     return DBHelper.openDatabase().then(function (db) {
       if (!db) return;
 
-      var tx = db.transaction(IDB_STORE_REVIEWS, 'readwrite');
-      var store = tx.objectStore(IDB_STORE_REVIEWS);
+      var tx = db.transaction(OBJECT_STORE_REVIEW, 'readwrite');
+      var store = tx.objectStore(OBJECT_STORE_REVIEW);
 
       if (Array.isArray(reviews)) {
         reviews.forEach(function (review) {
@@ -93,7 +93,7 @@ class DBHelper {
       })
   }
 
-  // Review IndexDB
+  // Review IndexedDB
 
   static getCachedReviewsbyRestaurantID(id) {
     return DBHelper.openDatabase()
@@ -108,7 +108,44 @@ class DBHelper {
         return store.getAll();
       });
   }
-  // End Review IndexDB
+
+
+  // End Review IndexedDB
+  /**
+   * Update favorite IDB
+   */
+  static idbToggleFavorite(id, value) {
+    return DBHelper.openDatabase().then(function (db) {
+      if (!db) return;
+
+      var tx = db.transaction(OBJECT_STORE_RESTAURANT, 'readwrite');
+      var store = tx.objectStore(OBJECT_STORE_RESTAURANT);
+
+      let val = store.get(id) || 0;
+      val.is_favorite = String(value);
+      store.put(val, id);
+      console.log('updated restaurant');
+
+      return tx.complete;
+    });
+  }
+
+
+  static updateRestaurantFavoriteStatus(id, is_favorite, callback) {
+
+    if (!navigator.onLine) {
+      alert('Oppsss');
+    }
+
+    fetch(`${DBHelper.DATABASE_URL}/restaurants/${id}/?is_favorite=${is_favorite}`, {
+        method: 'put'
+      }).then(res => res.json())
+      .then(res => {
+        DBHelper.idbToggleFavorite(id, is_favorite)
+        callback(null, res)
+      });
+
+  }
 
   static createNewReview(newReviewJSON, resolve) {
 

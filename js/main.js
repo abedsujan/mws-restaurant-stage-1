@@ -94,3 +94,31 @@ const fetchCuisines = () => {
     }
   });
 }
+
+/**
+ * Fetch all cuisines and set their HTML.
+ */
+const toggleFavorite = (restaurant_id, is_favorite) => {
+
+  // const state = (is_favorite) ? false : true;
+
+  DBHelper.updateRestaurantFavoriteStatus(restaurant_id, !!is_favorite, function (err, res) {
+    if (err) throw err;
+    console.log(res);
+    alert('triggered click event !!');
+    window.location.reload(false);
+  });
+}
+
+
+/**
+ * mark as favorite.
+ */
+// let toggleFavorite = (flag) => {
+//   DBHelper.toggleFavorite(restaurant.id, flag, function (err, res) {
+//     if (err) throw err;
+//     console.log(res);
+//     window.location.reload(false);
+//     //fillRestaurantHTML(res);
+//   });
+// };

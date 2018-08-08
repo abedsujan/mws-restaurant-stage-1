@@ -9,6 +9,7 @@ const fillRestaurantHTML = (restaurant) => {
     const address = document.getElementById('restaurant-address');
     address.innerHTML = createRestaurantAddressHTML(restaurant.address);
 
+    fillFavoriteHTML(restaurant);
     // fill operating hours
     if (restaurant.operating_hours) {
         fillRestaurantHoursHTML(restaurant.operating_hours);
@@ -89,6 +90,19 @@ const createReviewHTML = (review) => {
     return reviewHTML;
 }
 
+
+const fillFavoriteHTML = (restaurant) => {
+    const favoriteDiv = document.getElementById('favorite-star');
+
+    const favoriteDivInnerHTML = `
+    
+    ${(restaurant.is_favorite)? 
+      `<span onclick="toggleFavorite('${restaurant.id}', '${restaurant.is_favorite}')" class="favorite" aria-label="Toggle click on start icon to remove the restaurant ${restaurant.name}" from your favorite list of restarurants> ★ </span>`
+      :
+      `<span onclick="toggleFavorite('${restaurant.id}', '${restaurant.is_favorite}')" aria-label="Click on start icon to make the ${restaurant.name} as your favorite restarurant"> ☆ </span>`}
+    `;
+    favoriteDiv.insertAdjacentHTML('beforeend', favoriteDivInnerHTML);
+}
 /**
  * Create restaurant operating hours HTML table and add it to the webpage.
  */
